@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Admin Dashboard - AdvanceTeach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3b30b0;
+      --primary-light: #eef2ff;
+      --text: #0f172a;
+      --text-light: #334155;
+      --text-muted: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.08);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 24px;
+      --radius-md: 16px;
+      --danger: #dc2626;
+      --success: #059669;
+      --warning: #d97706;
+      --info: #2563eb;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(125deg, #f1f5f9 0%, #eef2ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .admin-layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(79, 70, 229, 0.12);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-decoration: none;
+    }
+
+    .logo-img { height: 40px; width: auto; }
+
+    .brand-text {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0f172a 0%, var(--primary) 80%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .brand-text span { color: var(--primary); background: none; }
+
+    .admin-nav {
+      flex: 1;
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .admin-nav a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      margin: 0 12px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .admin-nav a i {
+      width: 30px;
+      height: 30px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-nav a:hover,
+    .admin-nav a.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .admin-nav a:hover i,
+    .admin-nav a.active i {
+      color: var(--primary);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(79, 70, 229, 0.12);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .lang-switch {
+      background: #f0f3fe;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      gap: 8px;
+    }
+
+    .lang-switch a {
+      text-decoration: none;
+      color: #1e293b;
+      padding: 0 4px;
+    }
+
+    .lang-switch a.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logout-btn:hover { background: #fecaca; }
+
+    .page-wrap {
+      padding: 2rem;
+    }
+
+    .page-title {
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .page-title p {
+      color: var(--text-light);
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .welcome-text h2 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .welcome-text p {
+      color: var(--text-muted);
+    }
+
+    .welcome-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--primary-light);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-icon i {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .stat-info {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .quick-actions h3 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .action-btn i {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    .action-btn span {
+      font-weight: 500;
+    }
+
+    /* Recent Activity */
+    .recent-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .recent-card h3 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: #f1f5f9;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .activity-icon i {
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .activity-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      background: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    @media (max-width: 980px) {
+      .welcome-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .admin-nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .admin-nav a { padding: 8px 16px; }
+      .top-bar { justify-content: center; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="logo-brand">
+        <img src="images/logo-advanceteach.png" alt="AdvanceTeach" class="logo-img" onerror="this.src='https://placehold.co/200x60?text=AT'">
+        <div class="brand-text">Advance<span>Teach</span></div>
+      </a>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> <span data-key="dashboard">Dashboard</span></a>
+      <a href="admin-demandes.html"><i class="fas fa-inbox"></i> <span data-key="quoteRequests">Quote requests</span></a>
+      <a href="admin-offres.html"><i class="fas fa-tags"></i> <span data-key="offers">Offers</span></a>
+      <a href="admin-services.html"><i class="fas fa-cogs"></i> <span data-key="services">Services</span></a>
+      <a href="admin-projets.html"><i class="fas fa-rocket"></i> <span data-key="projects">Projects</span></a>
+      <a href="admin-pages.html"><i class="fas fa-file-alt"></i> <span data-key="pages">Pages</span></a>
+      <a href="admin-sections.html"><i class="fas fa-layer-group"></i> <span data-key="sections">Sections</span></a>
+      <a href="admin-media.html"><i class="fas fa-images"></i> <span data-key="media">Media</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="lang-switch">
+        <a href="#" data-lang="en" class="lang-en active">🇬🇧 <span data-key="langEn">English</span></a> |
+        <a href="#" data-lang="fr" class="lang-fr">🇫🇷 <span data-key="langFr">Français</span></a>
+      </div>
+      <button id="logoutBtn" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> <span data-key="logout">Logout</span>
+      </button>
+    </div>
+
+    <main class="page-wrap">
+      <div class="page-title">
+        <h1 data-key="dashboardTitle">Dashboard</h1>
+        <p data-key="dashboardSubtitle">Overview of your platform activity</p>
+      </div>
+
+      <!-- Welcome Card -->
+      <div class="welcome-card">
+        <div class="welcome-text">
+          <h2 id="welcomeMessage"><span data-key="welcome">Welcome back</span>, <span id="adminName">Administrator</span>!</h2>
+          <p id="adminRole" data-key="adminRole">Administrator</p>
+        </div>
+        <div class="welcome-badge">
+          <i class="fas fa-shield-alt"></i> <span data-key="adminBadge">Admin Panel</span>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statQuotes">0</div>
+            <div class="stat-label" data-key="statQuotes">Quote requests</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statTrainings">0</div>
+            <div class="stat-label" data-key="statTrainings">Training requests</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-flask"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statResearch">0</div>
+            <div class="stat-label" data-key="statResearch">Research projects</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-tags"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statServices">0</div>
+            <div class="stat-label" data-key="statServices">Active services</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statProjects">0</div>
+            <div class="stat-label" data-key="statProjects">Published projects</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="stat-info">
+            <div class="stat-number" id="statPages">0</div>
+            <div class="stat-label" data-key="statPages">Active pages</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h3><i class="fas fa-bolt"></i> <span data-key="quickActions">Quick actions</span></h3>
+        <div class="actions-grid">
+          <a href="admin-demandes.html" class="action-btn"><i class="fas fa-inbox"></i> <span data-key="viewRequests">View requests</span></a>
+          <a href="admin-services.html" class="action-btn"><i class="fas fa-plus-circle"></i> <span data-key="addService">Add a service</span></a>
+          <a href="admin-projets.html" class="action-btn"><i class="fas fa-plus-circle"></i> <span data-key="addProject">Add a project</span></a>
+          <a href="admin-pages.html" class="action-btn"><i class="fas fa-edit"></i> <span data-key="editPages">Edit pages</span></a>
+          <a href="admin-offres.html" class="action-btn"><i class="fas fa-tags"></i> <span data-key="manageOffers">Manage offers</span></a>
+          <!-- ✅ Bouton Sections corrigé -->
+          <a href="admin-sections.html" class="action-btn">
+            <i class="fas fa-layer-group"></i>
+            <span data-key="sections">Sections</span>
+          </a>
+          <a href="admin-media.html" class="action-btn"><i class="fas fa-images"></i> <span data-key="manageMedia">Manage media</span></a>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="recent-card">
+        <h3><i class="fas fa-history"></i> <span data-key="recentActivity">Recent activity</span></h3>
+        <div id="recentList" class="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon"><i class="fas fa-spinner fa-pulse"></i></div>
+            <div class="activity-content">
+              <div class="activity-title" data-key="loading">Loading...</div>
+              <div class="activity-date">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer><span data-key="footer">© 2025 AdvanceTeach — Admin Interface</span></footer>
+  </div>
+</div>
+
+<script>
+  let currentLang = localStorage.getItem('adminLang') || 'en';
+  let currentAdmin = null;
+
+  const translations = {
+    en: {
+      pageTitleTag: "Admin Dashboard - AdvanceTeach",
+      dashboard: "Dashboard",
+      quoteRequests: "Quote requests",
+      offers: "Offers",
+      services: "Services",
+      projects: "Projects",
+      pages: "Pages",
+      sections: "Sections", // ✅ Traduction ajoutée
+      media: "Media",
+      logout: "Logout",
+      dashboardTitle: "Dashboard",
+      dashboardSubtitle: "Overview of your platform activity",
+      welcome: "Welcome back",
+      adminRole: "Administrator",
+      adminBadge: "Admin Panel",
+      statQuotes: "Quote requests",
+      statTrainings: "Training requests",
+      statResearch: "Research projects",
+      statServices: "Active services",
+      statProjects: "Published projects",
+      statPages: "Active pages",
+      quickActions: "Quick actions",
+      viewRequests: "View requests",
+      addService: "Add a service",
+      addProject: "Add a project",
+      editPages: "Edit pages",
+      manageOffers: "Manage offers",
+      manageMedia: "Manage media",
+      recentActivity: "Recent activity",
+      loading: "Loading...",
+      noActivity: "No recent activity",
+      footer: "© 2025 AdvanceTeach — Admin Interface",
+      sessionExpired: "Session expired. Please log in again.",
+      notAvailable: "N/A",
+      langEn: "English",
+      langFr: "French"
+    },
+    fr: {
+      pageTitleTag: "Tableau de bord Admin - AdvanceTeach",
+      dashboard: "Tableau de bord",
+      quoteRequests: "Demandes de devis",
+      offers: "Offres",
+      services: "Services",
+      projects: "Réalisations",
+      pages: "Pages",
+      sections: "Sections", // ✅ Traduction ajoutée
+      media: "Médias",
+      logout: "Déconnexion",
+      dashboardTitle: "Tableau de bord",
+      dashboardSubtitle: "Aperçu de l'activité de votre plateforme",
+      welcome: "Bon retour",
+      adminRole: "Administrateur",
+      adminBadge: "Panneau Admin",
+      statQuotes: "Demandes de devis",
+      statTrainings: "Demandes de formation",
+      statResearch: "Projets de recherche",
+      statServices: "Services actifs",
+      statProjects: "Réalisations publiées",
+      statPages: "Pages actives",
+      quickActions: "Actions rapides",
+      viewRequests: "Voir les demandes",
+      addService: "Ajouter un service",
+      addProject: "Ajouter une réalisation",
+      editPages: "Modifier les pages",
+      manageOffers: "Gérer les offres",
+      manageMedia: "Gérer les médias",
+      recentActivity: "Activité récente",
+      loading: "Chargement...",
+      noActivity: "Aucune activité récente",
+      footer: "© 2025 AdvanceTeach — Interface Admin",
+      sessionExpired: "Session expirée. Veuillez vous reconnecter.",
+      notAvailable: "N/D",
+      langEn: "Anglais",
+      langFr: "Français"
+    }
+  };
+
+  // Le reste de ton script JavaScript reste inchangé
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function updateUILanguage() {
+    document.title = t('pageTitleTag');
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+    document.querySelectorAll('.lang-switch a').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('data-lang') === currentLang);
+    });
+    if (currentAdmin) {
+      document.getElementById('welcomeMessage').innerHTML = t('welcome') + ', <span id="adminName">' + escapeHtml(currentAdmin.full_name || currentAdmin.email) + '</span>!';
+      document.getElementById('adminRole').innerHTML = t('adminRole');
+    }
+  }
+
+  async function checkSession() {
+    try {
+      const response = await fetch('/api/admin/check', {
+        credentials: 'same-origin'
+      });
+      const data = await response.json();
+      if (!data.loggedIn) {
+        window.location.href = 'admin-login.html';
+        return false;
+      }
+      currentAdmin = data.admin;
+      document.getElementById('welcomeMessage').innerHTML = t('welcome') + ', <span id="adminName">' + escapeHtml(currentAdmin.full_name || currentAdmin.email) + '</span>!';
+      document.getElementById('adminRole').innerHTML = t('adminRole');
+      return true;
+    } catch (error) {
+      window.location.href = 'admin-login.html';
+      return false;
+    }
+  }
+
+  async function loadStats() {
+    try {
+      const quotesRes = await fetch('/api/admin/demandes', { credentials: 'same-origin' });
+      const quotesData = await quotesRes.json();
+      document.getElementById('statQuotes').textContent = quotesData.success ? quotesData.data.length : 0;
+
+      const servicesRes = await fetch('/api/admin/services', { credentials: 'same-origin' });
+      const servicesData = await servicesRes.json();
+      const activeServices = servicesData.success ? servicesData.data.filter(s => s.is_active).length : 0;
+      document.getElementById('statServices').textContent = activeServices;
+
+      const projectsRes = await fetch('/api/admin/projets', { credentials: 'same-origin' });
+      const projectsData = await projectsRes.json();
+      const publishedProjects = projectsData.success ? projectsData.data.filter(p => p.is_published).length : 0;
+      document.getElementById('statProjects').textContent = publishedProjects;
+
+      const pagesRes = await fetch('/api/admin/pages', { credentials: 'same-origin' });
+      const pagesData = await pagesRes.json();
+      const activePages = pagesData.success ? pagesData.data.filter(p => p.is_published).length : 0;
+      document.getElementById('statPages').textContent = activePages;
+
+      document.getElementById('statTrainings').textContent = t('notAvailable');
+      document.getElementById('statResearch').textContent = t('notAvailable');
+    } catch (error) {
+      console.error('Error loading stats:', error);
+    }
+  }
+
+  async function loadRecentActivity() {
+    const container = document.getElementById('recentList');
+    try {
+      const quotesRes = await fetch('/api/admin/demandes', { credentials: 'same-origin' });
+      const quotesData = await quotesRes.json();
+      if (quotesData.success && quotesData.data.length > 0) {
+        const recent = quotesData.data.slice(0, 5);
+        container.innerHTML = recent.map(item =>
+          '<div class="activity-item">' +
+            '<div class="activity-icon"><i class="fas fa-file-invoice-dollar"></i></div>' +
+            '<div class="activity-content">' +
+              '<div class="activity-title">' + t('statQuotes') + ' - ' + escapeHtml(item.full_name) + '</div>' +
+              '<div class="activity-date">' + new Date(item.created_at).toLocaleString(currentLang === 'fr' ? 'fr-FR' : 'en-CA') + '</div>' +
+            '</div>' +
+          '</div>'
+        ).join('');
+      } else {
+        container.innerHTML = '<div class="activity-item"><div class="activity-content"><div class="activity-title">' + t('noActivity') + '</div></div></div>';
+      }
+    } catch (error) {
+      container.innerHTML = '<div class="activity-item"><div class="activity-content"><div class="activity-title">' + t('noActivity') + '</div></div></div>';
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  document.querySelectorAll('.lang-switch a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentLang = link.getAttribute('data-lang');
+      localStorage.setItem('adminLang', currentLang);
+      updateUILanguage();
+      loadStats();
+      loadRecentActivity();
+    });
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+      await fetch('/api/admin/logout', {
+        method: 'POST',
+        credentials: 'same-origin'
+      });
+    } catch (error) {
+    } finally {
+      window.location.href = 'admin-login.html';
+    }
+  });
+
+  (async function init() {
+    updateUILanguage();
+    const ok = await checkSession();
+    if (ok) {
+      await loadStats();
+      await loadRecentActivity();
+    }
+  })();
+</script>
+</body>
+</html>

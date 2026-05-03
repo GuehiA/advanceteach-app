@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach</title>
+  <meta name="description" content="AdvanceTeach projects" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+
+      <div class="hero-buttons">
+        <a href="devis.html" class="btn btn-primary">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span data-key="quoteBtn">Request a quote</span>
+        </a>
+        <a href="contact.html" class="btn btn-secondary">
+          <i class="fas fa-headset"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img
+        id="heroImage"
+        src="images/projects-hero.jpg"
+        alt="AdvanceTeach Projects"
+        class="hero-logo"
+        onerror="this.src='https://placehold.co/520x340?text=Projects'"
+      >
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container">
+    <h2><span data-key="projectsSectionTitle">Our projects</span></h2>
+    <div class="cards" id="projectsGrid">
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3 data-key="loading">Loading...</h3>
+        <p data-key="loadingText">Please wait.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container cta-block">
+    <h2><span data-key="ctaTitle">Let’s build your next project</span></h2>
+    <p><span data-key="ctaDesc">AdvanceTeach helps organizations turn ideas into practical, intelligent and impactful solutions.</span></p>
+
+    <div class="hero-buttons" style="justify-content: center;">
+      <a href="devis.html" class="btn btn-primary">
+        <i class="fas fa-file-signature"></i>
+        <span data-key="ctaQuoteBtn">Request a quote</span>
+      </a>
+      <a href="contact.html" class="btn btn-secondary">
+        <i class="fas fa-paper-plane"></i>
+        <span data-key="ctaContactBtn">Write to AdvanceTeach</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  const translations = {
+    en: {
+      pageTitleTag: "AdvanceTeach | Projects",
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      quote: "Quote",
+      contact: "Contact",
+
+      quoteBtn: "Request a quote",
+      contactBtn: "Contact us",
+
+      projectsSectionTitle: "Our projects",
+      ctaTitle: "Let’s build your next project",
+      ctaDesc: "AdvanceTeach helps organizations turn ideas into practical, intelligent and impactful solutions.",
+      ctaQuoteBtn: "Request a quote",
+      ctaContactBtn: "Write to AdvanceTeach",
+
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+
+      loading: "Loading...",
+      loadingText: "Please wait.",
+      noProjects: "No projects available at the moment.",
+      noProjectsText: "New case studies will appear here soon.",
+      errorTitle: "Unable to load projects",
+      errorText: "Please try again later.",
+
+      defaultHeroTitle: "Projects and case studies",
+      defaultHeroText: "Discover how AdvanceTeach supports innovation through AI consulting, smart platforms and professional learning projects.",
+      categoryLabel: "Category",
+      contextLabel: "Context",
+      technologiesLabel: "Technologies"
+    },
+
+    fr: {
+      pageTitleTag: "AdvanceTeach | Réalisations",
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      quote: "Devis",
+      contact: "Contact",
+
+      quoteBtn: "Demander un devis",
+      contactBtn: "Nous contacter",
+
+      projectsSectionTitle: "Nos réalisations",
+      ctaTitle: "Construisons votre prochain projet",
+      ctaDesc: "AdvanceTeach aide les organisations à transformer leurs idées en solutions pratiques, intelligentes et à fort impact.",
+      ctaQuoteBtn: "Demander un devis",
+      ctaContactBtn: "Écrire à AdvanceTeach",
+
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+
+      loading: "Chargement...",
+      loadingText: "Veuillez patienter.",
+      noProjects: "Aucune réalisation disponible pour le moment.",
+      noProjectsText: "De nouvelles études de cas apparaîtront ici bientôt.",
+      errorTitle: "Impossible de charger les réalisations",
+      errorText: "Veuillez réessayer plus tard.",
+
+      defaultHeroTitle: "Réalisations et études de cas",
+      defaultHeroText: "Découvrez comment AdvanceTeach accompagne l’innovation grâce au conseil IA, aux plateformes intelligentes et aux projets de formation professionnelle.",
+      categoryLabel: "Catégorie",
+      contextLabel: "Contexte",
+      technologiesLabel: "Technologies"
+    }
+  };
+
+  let currentLang = 'en';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  function escapeAttribute(text) {
+    return escapeHtml(text).replace(/'/g, '&#39;');
+  }
+
+  async function loadProjectsPageContent() {
+    document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+    document.getElementById('pageContent').textContent = t('defaultHeroText');
+    document.title = t('pageTitleTag');
+  }
+
+  function renderProjects(projects) {
+    const container = document.getElementById('projectsGrid');
+
+    if (!projects.length) {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-info"></i>
+          <h3>${escapeHtml(t('noProjects'))}</h3>
+          <p>${escapeHtml(t('noProjectsText'))}</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = projects.map(project => `
+      <div class="card">
+        <img
+          src="${escapeAttribute(project.image_path || 'https://placehold.co/500x280?text=AdvanceTeach')}"
+          alt="${escapeAttribute(project.title || 'Project')}"
+          class="card-image"
+          onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'"
+        >
+        <i class="fas fa-rocket"></i>
+        <h3>${escapeHtml(project.title || '')}</h3>
+        <p>${escapeHtml(project.short_description || '')}</p>
+        ${project.category ? `<p><strong>${escapeHtml(t('categoryLabel'))}:</strong> ${escapeHtml(project.category)}</p>` : ''}
+        ${project.client_or_context ? `<p><strong>${escapeHtml(t('contextLabel'))}:</strong> ${escapeHtml(project.client_or_context)}</p>` : ''}
+        ${project.technologies ? `<p><strong>${escapeHtml(t('technologiesLabel'))}:</strong> ${escapeHtml(project.technologies)}</p>` : ''}
+        ${project.external_url ? `
+          <a class="btn btn-secondary" href="${escapeAttribute(project.external_url)}" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-arrow-up-right-from-square"></i> ${currentLang === 'fr' ? 'Voir le projet' : 'View project'}
+          </a>
+        ` : ''}
+      </div>
+    `).join('');
+  }
+
+  async function loadProjects() {
+    const container = document.getElementById('projectsGrid');
+    container.innerHTML = `
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>${escapeHtml(t('loading'))}</h3>
+        <p>${escapeHtml(t('loadingText'))}</p>
+      </div>
+    `;
+
+    try {
+      const response = await fetch(`/api/projets?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !Array.isArray(result.data)) {
+        throw new Error('Projects load failed');
+      }
+
+      renderProjects(result.data);
+    } catch (error) {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-exclamation"></i>
+          <h3>${escapeHtml(t('errorTitle'))}</h3>
+          <p>${escapeHtml(t('errorText'))}</p>
+        </div>
+      `;
+    }
+  }
+
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    await loadProjectsPageContent();
+    await loadProjects();
+  }
+
+  (async function init() {
+    currentLang = await initGlobalLayout(translations, refreshPage);
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>

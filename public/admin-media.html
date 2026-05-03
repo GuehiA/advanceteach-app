@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Admin Médias - AdvanceTeach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3b30b0;
+      --primary-light: #eef2ff;
+      --text: #0f172a;
+      --text-light: #334155;
+      --text-muted: #64748b;
+      --bg: #f9fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.08);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 24px;
+      --radius-md: 16px;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(125deg, #f1f5f9 0%, #eef2ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .admin-layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(79, 70, 229, 0.12);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header { padding: 1.5rem 1.2rem; border-bottom: 1px solid var(--border); }
+    .logo-brand { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+    .logo-img { height: 40px; width: auto; }
+    .brand-text { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #0f172a 0%, var(--primary) 80%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    .brand-text span { color: var(--primary); background: none; }
+    .admin-nav { flex: 1; padding: 1.5rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-nav a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      margin: 0 12px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .admin-nav a i { width: 24px; color: var(--text-muted); }
+    .admin-nav a:hover, .admin-nav a.active { background: var(--primary-light); color: var(--primary); }
+    .admin-nav a:hover i, .admin-nav a.active i { color: var(--primary); }
+
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+    .top-bar {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(79, 70, 229, 0.12);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .lang-switch {
+      background: #f0f3fe;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      gap: 8px;
+    }
+    .lang-switch a { text-decoration: none; color: #1e293b; padding: 0 4px; }
+    .lang-switch a.active { color: var(--primary); font-weight: 700; }
+    .logout-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logout-btn:hover { background: #fecaca; }
+
+    .dashboard-main { padding: 2rem; max-width: 1400px; width: 100%; margin: 0 auto; }
+    .form-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .form-card h2 { margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+    .form-group { margin-bottom: 20px; }
+    label { font-weight: 600; display: block; margin-bottom: 8px; }
+    input[type="file"] { 
+      padding: 10px; 
+      border: 2px dashed var(--border); 
+      border-radius: var(--radius-md); 
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    input[type="file"]:hover { border-color: var(--primary); background: var(--primary-light); }
+    .btn-primary { 
+      background: var(--primary); 
+      color: white; 
+      border: none; 
+      padding: 12px 24px; 
+      border-radius: 40px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .list-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .list-card h2 { margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    
+    .media-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+      gap: 24px; 
+    }
+    
+    .media-item {
+      background: #fafbff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .media-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary);
+    }
+    
+    .media-preview {
+      width: 100%;
+      height: 160px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .media-preview img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+    }
+    .media-preview i { 
+      font-size: 3rem; 
+      color: var(--primary); 
+    }
+    .file-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .media-info {
+      margin-top: 12px;
+      text-align: left;
+    }
+    .filename { 
+      font-size: 0.8rem; 
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+    .file-size { 
+      font-size: 0.7rem; 
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .media-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .copy-btn, .delete-btn, .view-btn {
+      flex: 1;
+      padding: 6px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .copy-btn { background: var(--primary-light); color: var(--primary); }
+    .copy-btn:hover { background: var(--primary); color: white; }
+    .delete-btn { background: #fee2e2; color: #b91c1c; }
+    .delete-btn:hover { background: #fecaca; transform: scale(1.05); }
+    .view-btn { background: #e2e8f0; color: var(--text); }
+    .view-btn:hover { background: #cbd5e1; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+    .modal-content img, .modal-content iframe {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+    }
+    .close-modal:hover { color: #ccc; }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      z-index: 2000;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 20px; margin-top: auto; }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: static; }
+      .admin-nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .top-bar { justify-content: center; }
+      .dashboard-main { padding: 1rem; }
+      .media-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="logo-brand">
+        <img src="images/logo-advanceteach.png" alt="AdvanceTeach" class="logo-img" onerror="this.src='https://placehold.co/200x60?text=AT'">
+        <div class="brand-text">Advance<span>Teach</span></div>
+      </a>
+    </div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="admin-demandes.html"><i class="fas fa-inbox"></i> Demandes</a>
+      <a href="admin-offres.html"><i class="fas fa-tags"></i> Offres</a>
+      <a href="admin-services.html"><i class="fas fa-cogs"></i> Services</a>
+      <a href="admin-projets.html"><i class="fas fa-rocket"></i> Réalisations</a>
+      <a href="admin-pages.html"><i class="fas fa-file-alt"></i> Pages</a>
+      <a href="admin-sections.html"><i class="fas fa-layer-group"></i> <span data-key="sections">Sections</span></a>
+      <a href="admin-media.html" class="active"><i class="fas fa-images"></i> Médias</a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="lang-switch">
+        <a href="#" data-lang="en" class="lang-en active">🇬🇧 EN</a> | <a href="#" data-lang="fr" class="lang-fr">🇫🇷 FR</a>
+      </div>
+      <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+    </div>
+
+    <main class="dashboard-main">
+      <div class="form-card">
+        <h2><i class="fas fa-upload"></i> Uploader un fichier</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Sélectionner une image ou un PDF (max 5MB)</label>
+            <input type="file" id="fileInput" accept="image/*,application/pdf" required>
+          </div>
+          <button type="submit" class="btn-primary" id="uploadBtn">
+            <i class="fas fa-cloud-upload-alt"></i> Uploader
+          </button>
+        </form>
+      </div>
+
+      <div class="list-card">
+        <h2>
+          <span><i class="fas fa-images"></i> Galerie média</span>
+          <button onclick="loadMedia()" class="btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">
+            <i class="fas fa-sync-alt"></i> Rafraîchir
+          </button>
+        </h2>
+        <div id="mediaList" class="media-grid"><p style="text-align:center;color:gray;">Chargement...</p></div>
+      </div>
+    </main>
+    <footer>© 2025 AdvanceTeach — Admin Interface</footer>
+  </div>
+</div>
+
+<!-- Modal pour prévisualisation -->
+<div id="previewModal" class="modal">
+  <span class="close-modal">&times;</span>
+  <div class="modal-content" id="modalContent"></div>
+</div>
+
+<script>
+  async function checkSession() {
+    try {
+      const res = await fetch('/api/admin/check', { credentials: 'same-origin' });
+      const data = await res.json();
+      if (!data.loggedIn) window.location.href = 'admin-login.html';
+      else loadMedia();
+    } catch (error) { window.location.href = 'admin-login.html'; }
+  }
+
+  async function loadMedia() {
+    try {
+      const res = await fetch('/api/admin/media', { credentials: 'same-origin' });
+      const data = await res.json();
+      if (data.success) renderMedia(data.data);
+      else showToast('Erreur chargement médias', 'error');
+    } catch (error) { 
+      console.error(error);
+      showToast('Erreur réseau', 'error');
+    }
+  }
+
+  function formatFileSize(bytes) {
+    if (!bytes) return 'Taille inconnue';
+    const sizes = ['o', 'Ko', 'Mo', 'Go'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+  }
+
+  function renderMedia(media) {
+    const container = document.getElementById('mediaList');
+    if (!media.length) { 
+      container.innerHTML = '<p style="text-align:center;color:gray;">Aucun fichier uploadé</p>'; 
+      return; 
+    }
+    
+    container.innerHTML = media.map(m => {
+      const isImage = m.mime_type.startsWith('image/');
+      const isPdf = m.mime_type === 'application/pdf';
+      const fileUrl = m.url || m.file_path;
+      
+      return `
+        <div class="media-item" data-id="${m.id}">
+          <div class="media-preview" onclick="previewMedia('${fileUrl}', '${m.mime_type}')">
+            ${isImage ? `<img src="${escapeHtml(fileUrl)}" alt="${escapeHtml(m.original_name)}">` : 
+                        `<i class="fas fa-file-${isPdf ? 'pdf' : 'alt'}"></i>`}
+            <div class="file-badge">${isImage ? 'IMG' : (isPdf ? 'PDF' : 'FILE')}</div>
+          </div>
+          <div class="media-info">
+            <div class="filename" title="${escapeHtml(m.original_name)}">${escapeHtml(m.original_name).substring(0, 30)}${escapeHtml(m.original_name).length > 30 ? '...' : ''}</div>
+            <div class="file-size">${formatFileSize(m.size)}</div>
+            <div class="media-actions">
+              <button class="copy-btn" onclick="copyToClipboard('${fileUrl}')">
+                <i class="fas fa-copy"></i> URL
+              </button>
+              <button class="view-btn" onclick="previewMedia('${fileUrl}', '${m.mime_type}')">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="delete-btn" onclick="deleteMedia(${m.id})">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function copyToClipboard(text) { 
+    navigator.clipboard.writeText(text);
+    showToast('URL copiée : ' + text, 'success');
+  }
+
+  function previewMedia(url, mimeType) {
+    const modal = document.getElementById('previewModal');
+    const modalContent = document.getElementById('modalContent');
+    
+    if (mimeType.startsWith('image/')) {
+      modalContent.innerHTML = `<img src="${url}" alt="Preview">`;
+    } else if (mimeType === 'application/pdf') {
+      modalContent.innerHTML = `<iframe src="${url}" style="width: 100%; height: 80vh;" frameborder="0"></iframe>`;
+    } else {
+      modalContent.innerHTML = `<p style="color: white; text-align: center;">Aperçu non disponible</p>`;
+    }
+    
+    modal.style.display = 'flex';
+  }
+
+  async function deleteMedia(id) {
+    if (!confirm('Supprimer définitivement ce fichier ?')) return;
+    try { 
+      const res = await fetch(`/api/admin/media/${id}`, { method: 'DELETE', credentials: 'same-origin' });
+      const data = await res.json();
+      if (data.success) {
+        loadMedia(); 
+        showToast('Fichier supprimé avec succès', 'success');
+      } else {
+        showToast(data.message || 'Erreur suppression', 'error');
+      }
+    } catch(error) { 
+      showToast('Erreur lors de la suppression', 'error');
+    }
+  }
+
+  document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    
+    if (!fileInput.files.length) { 
+      showToast('Sélectionnez un fichier', 'error'); 
+      return; 
+    }
+    
+    const file = fileInput.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('Fichier trop volumineux (max 5MB)', 'error');
+      return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Upload en cours...';
+    
+    try {
+      const res = await fetch('/api/admin/media/upload', { method: 'POST', body: formData, credentials: 'same-origin' });
+      const data = await res.json();
+      
+      if (data.success) { 
+        showToast('Upload réussi !', 'success'); 
+        fileInput.value = ''; 
+        loadMedia();
+      } else {
+        showToast(data.message || 'Erreur upload', 'error');
+      }
+    } catch (error) { 
+      showToast('Erreur réseau lors de l\'upload', 'error');
+    } finally {
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploader';
+    }
+  });
+
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.background = type === 'success' ? '#10b981' : (type === 'error' ? '#ef4444' : '#333');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  function escapeHtml(t) { 
+    if (!t) return ''; 
+    return String(t).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); 
+  }
+
+  // Modal close
+  document.querySelector('.close-modal').onclick = function() {
+    document.getElementById('previewModal').style.display = 'none';
+  }
+  window.onclick = function(event) {
+    const modal = document.getElementById('previewModal');
+    if (event.target == modal) modal.style.display = 'none';
+  }
+
+  // Langue
+  document.querySelectorAll('.lang-switch a').forEach(link => link.addEventListener('click', (e) => { 
+    e.preventDefault(); 
+    const lang = link.getAttribute('data-lang'); 
+    localStorage.setItem('adminLang', lang); 
+    document.querySelectorAll('.lang-switch a').forEach(l => l.classList.toggle('active', l.getAttribute('data-lang') === lang)); 
+  }));
+  
+  // Déconnexion
+  document.getElementById('logoutBtn').addEventListener('click', async () => { 
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }).catch(()=>{}); 
+    window.location.href = 'admin-login.html'; 
+  });
+
+  checkSession();
+</script>
+</body>
+</html>

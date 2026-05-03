@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Admin Demandes - AdvanceTeach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3b30b0;
+      --primary-light: #eef2ff;
+      --text: #0f172a;
+      --text-light: #334155;
+      --text-muted: #64748b;
+      --bg: #f9fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.08);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 24px;
+      --radius-md: 16px;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(125deg, #f1f5f9 0%, #eef2ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .admin-layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(79, 70, 229, 0.12);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header { padding: 1.5rem 1.2rem; border-bottom: 1px solid var(--border); }
+    .logo-brand { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+    .logo-img { height: 40px; width: auto; }
+    .brand-text { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #0f172a 0%, var(--primary) 80%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    .brand-text span { color: var(--primary); background: none; }
+    .admin-nav { flex: 1; padding: 1.5rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-nav a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      margin: 0 12px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .admin-nav a i { width: 24px; color: var(--text-muted); }
+    .admin-nav a:hover, .admin-nav a.active { background: var(--primary-light); color: var(--primary); }
+    .admin-nav a:hover i, .admin-nav a.active i { color: var(--primary); }
+
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+    .top-bar {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(79, 70, 229, 0.12);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .lang-switch {
+      background: #f0f3fe;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      gap: 8px;
+    }
+    .lang-switch a { text-decoration: none; color: #1e293b; padding: 0 4px; }
+    .lang-switch a.active { color: var(--primary); font-weight: 700; }
+    .logout-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logout-btn:hover { background: #fecaca; }
+
+    .dashboard-main { padding: 2rem; max-width: 1400px; width: 100%; }
+    .list-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .list-card h2 { margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-card i { font-size: 2rem; color: var(--primary); margin-bottom: 12px; }
+    .stat-card .number { font-size: 2rem; font-weight: 700; color: var(--text); }
+    .stat-card .label { color: var(--text-muted); font-size: 0.85rem; }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .filter-btn.active { background: var(--primary); color: white; }
+
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; font-weight: 600; color: var(--text); }
+    tr:hover td { background: #fafbff; }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .status-new { background: #fef3c7; color: #92400e; }
+    .status-read { background: #dbeafe; color: #1e40af; }
+    .status-processed { background: #d1fae5; color: #065f46; }
+    .status-archived { background: #f3f4f6; color: #4b5563; }
+    .action-btn { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 8px; transition: all 0.2s; }
+    .action-btn.view { color: var(--primary); }
+    .action-btn.delete { color: #ef4444; }
+    .action-btn:hover { background: var(--primary-light); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-header h3 { font-size: 1.3rem; }
+    .close-modal { cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
+    .detail-row { margin-bottom: 16px; }
+    .detail-label { font-weight: 600; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 4px; }
+    .detail-value { color: var(--text); word-break: break-word; }
+
+    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 20px; font-size: 0.85rem; margin-top: auto; }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .admin-nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .admin-nav a { padding: 8px 16px; }
+      .top-bar { justify-content: center; }
+      th, td { padding: 10px 8px; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="logo-brand">
+        <img src="images/logo-advanceteach.png" alt="AdvanceTeach" class="logo-img" onerror="this.src='https://placehold.co/200x60?text=AT'">
+        <div class="brand-text">Advance<span>Teach</span></div>
+      </a>
+    </div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> <span data-key="nav_dashboard">Dashboard</span></a>
+      <a href="admin-demandes.html" class="active"><i class="fas fa-inbox"></i> <span data-key="nav_requests">Demandes</span></a>
+      <a href="admin-offres.html"><i class="fas fa-tags"></i> <span data-key="nav_offers">Offres</span></a>
+      <a href="admin-services.html"><i class="fas fa-cogs"></i> <span data-key="nav_services">Services</span></a>
+      <a href="admin-projets.html"><i class="fas fa-rocket"></i> <span data-key="nav_projects">Réalisations</span></a>
+      <a href="admin-pages.html"><i class="fas fa-file-alt"></i> <span data-key="nav_pages">Pages</span></a>
+      <a href="admin-sections.html"><i class="fas fa-layer-group"></i> <span data-key="sections">Sections</span></a>
+      <a href="admin-media.html"><i class="fas fa-images"></i> <span data-key="nav_media">Médias</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div class="lang-switch">
+        <a href="#" data-lang="en" class="lang-en active">🇬🇧 EN</a>
+        <span>|</span>
+        <a href="#" data-lang="fr" class="lang-fr">🇫🇷 FR</a>
+      </div>
+      <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span data-key="logout">Déconnexion</span></button>
+    </div>
+
+    <main class="dashboard-main">
+      <!-- Statistiques -->
+      <div class="stats-grid">
+        <div class="stat-card"><i class="fas fa-envelope"></i><div class="number" id="totalCount">0</div><div class="label" data-key="stat_total">Total</div></div>
+        <div class="stat-card"><i class="fas fa-clock"></i><div class="number" id="newCount">0</div><div class="label" data-key="stat_new">Nouvelles</div></div>
+        <div class="stat-card"><i class="fas fa-eye"></i><div class="number" id="readCount">0</div><div class="label" data-key="stat_read">Lues</div></div>
+        <div class="stat-card"><i class="fas fa-check-circle"></i><div class="number" id="processedCount">0</div><div class="label" data-key="stat_processed">Traitées</div></div>
+      </div>
+
+      <div class="list-card">
+        <h2><i class="fas fa-file-invoice-dollar"></i> <span data-key="title">Demandes de devis</span></h2>
+        
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all"><span data-key="filter_all">Toutes</span></button>
+          <button class="filter-btn" data-filter="new"><span data-key="filter_new">Nouvelles</span></button>
+          <button class="filter-btn" data-filter="read"><span data-key="filter_read">Lues</span></button>
+          <button class="filter-btn" data-filter="processed"><span data-key="filter_processed">Traitées</span></button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="th_date">Date</th>
+                <th data-key="th_name">Nom</th>
+                <th data-key="th_email">Email</th>
+                <th data-key="th_service">Service</th>
+                <th data-key="th_status">Statut</th>
+                <th data-key="th_actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="demandesList">
+              <tr><td colspan="6" style="text-align:center;"><span data-key="loading">Chargement...</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer><span data-key="footer">© 2025 AdvanceTeach — Interface d'administration</span></footer>
+  </div>
+</div>
+
+<!-- Modal détails -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 data-key="modal_title">Détails de la demande</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  let currentLang = localStorage.getItem('adminLang') || 'fr';
+  let allDemandes = [];
+  let currentFilter = 'all';
+
+  // Dictionnaire complet des traductions
+  const translations = {
+    fr: {
+      nav_dashboard: "Tableau de bord",
+      nav_requests: "Demandes",
+      nav_offers: "Offres",
+      nav_services: "Services",
+      nav_projects: "Réalisations",
+      nav_pages: "Pages",
+      nav_media: "Médias",
+      logout: "Déconnexion",
+      title: "Demandes de devis",
+      stat_total: "Total",
+      stat_new: "Nouvelles",
+      stat_read: "Lues",
+      stat_processed: "Traitées",
+      filter_all: "Toutes",
+      filter_new: "Nouvelles",
+      filter_read: "Lues",
+      filter_processed: "Traitées",
+      th_date: "Date",
+      th_name: "Nom",
+      th_email: "Email",
+      th_service: "Service",
+      th_status: "Statut",
+      th_actions: "Actions",
+      loading: "Chargement...",
+      no_data: "Aucune demande",
+      modal_title: "Détails de la demande",
+      footer: "© 2025 AdvanceTeach — Interface d'administration",
+      status_new: "Nouvelle",
+      status_read: "Lue",
+      status_processed: "Traitée",
+      confirm_delete: "Supprimer cette demande ?",
+      full_name: "Nom complet",
+      email: "Email",
+      organization: "Organisation",
+      phone: "Téléphone",
+      requested_service: "Service demandé",
+      estimated_budget: "Budget estimé",
+      desired_timeline: "Délai souhaité",
+      project_description: "Description du projet",
+      created_at: "Date de réception"
+    },
+    en: {
+      nav_dashboard: "Dashboard",
+      nav_requests: "Requests",
+      nav_offers: "Offers",
+      nav_services: "Services",
+      nav_projects: "Projects",
+      nav_pages: "Pages",
+      nav_media: "Media",
+      logout: "Logout",
+      title: "Quote requests",
+      stat_total: "Total",
+      stat_new: "New",
+      stat_read: "Read",
+      stat_processed: "Processed",
+      filter_all: "All",
+      filter_new: "New",
+      filter_read: "Read",
+      filter_processed: "Processed",
+      th_date: "Date",
+      th_name: "Name",
+      th_email: "Email",
+      th_service: "Service",
+      th_status: "Status",
+      th_actions: "Actions",
+      loading: "Loading...",
+      no_data: "No requests",
+      modal_title: "Request details",
+      footer: "© 2025 AdvanceTeach — Admin Interface",
+      status_new: "New",
+      status_read: "Read",
+      status_processed: "Processed",
+      confirm_delete: "Delete this request?",
+      full_name: "Full name",
+      email: "Email",
+      organization: "Organization",
+      phone: "Phone",
+      requested_service: "Requested service",
+      estimated_budget: "Estimated budget",
+      desired_timeline: "Desired timeline",
+      project_description: "Project description",
+      created_at: "Received date"
+    }
+  };
+
+  const statusValues = {
+    fr: { new: "Nouvelle", read: "Lue", processed: "Traitée" },
+    en: { new: "New", read: "Read", processed: "Processed" }
+  };
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function updateUILanguage() {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+    document.querySelectorAll('.lang-switch a').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('data-lang') === currentLang);
+    });
+    updateStats();
+    renderTable();
+  }
+
+  async function checkSession() {
+    try {
+      const response = await fetch('/api/admin/check', { credentials: 'same-origin' });
+      const data = await response.json();
+      if (!data.loggedIn) window.location.href = 'admin-login.html';
+      else loadDemandes();
+    } catch (error) { window.location.href = 'admin-login.html'; }
+  }
+
+  async function loadDemandes() {
+    try {
+      const response = await fetch('/api/admin/demandes', { credentials: 'same-origin' });
+      const data = await response.json();
+      if (data.success) {
+        allDemandes = data.data;
+        updateStats();
+        renderTable();
+      }
+    } catch (error) { console.error('Erreur chargement:', error); }
+  }
+
+  function updateStats() {
+    const total = allDemandes.length;
+    const newCount = allDemandes.filter(d => d.status === 'new').length;
+    const readCount = allDemandes.filter(d => d.status === 'read').length;
+    const processedCount = allDemandes.filter(d => d.status === 'processed').length;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('newCount').textContent = newCount;
+    document.getElementById('readCount').textContent = readCount;
+    document.getElementById('processedCount').textContent = processedCount;
+  }
+
+  function getFilteredDemandes() {
+    if (currentFilter === 'all') return allDemandes;
+    return allDemandes.filter(d => d.status === currentFilter);
+  }
+
+  async function updateStatus(id, newStatus) {
+    try {
+      const response = await fetch(`/api/admin/demandes/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (response.ok) loadDemandes();
+    } catch (error) { console.error('Erreur mise à jour statut:', error); }
+  }
+
+  async function deleteDemande(id) {
+    if (!confirm(t('confirm_delete'))) return;
+    try {
+      const response = await fetch(`/api/admin/demandes/${id}`, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      });
+      if (response.ok) loadDemandes();
+    } catch (error) { console.error('Erreur suppression:', error); }
+  }
+
+  function showDetails(demande) {
+    const modal = document.getElementById('detailModal');
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = `
+      <div class="detail-row"><div class="detail-label">${t('full_name')}</div><div class="detail-value">${escapeHtml(demande.full_name || '')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('email')}</div><div class="detail-value">${escapeHtml(demande.email || '')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('organization')}</div><div class="detail-value">${escapeHtml(demande.organization || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('phone')}</div><div class="detail-value">${escapeHtml(demande.phone || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('requested_service')}</div><div class="detail-value">${escapeHtml(demande.requested_service || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('estimated_budget')}</div><div class="detail-value">${escapeHtml(demande.estimated_budget || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('desired_timeline')}</div><div class="detail-value">${escapeHtml(demande.desired_timeline || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('project_description')}</div><div class="detail-value">${escapeHtml(demande.project_description || '—')}</div></div>
+      <div class="detail-row"><div class="detail-label">${t('created_at')}</div><div class="detail-value">${new Date(demande.created_at).toLocaleString(currentLang === 'fr' ? 'fr-FR' : 'en-US')}</div></div>
+    `;
+    modal.classList.add('active');
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('demandesList');
+    const filtered = getFilteredDemandes();
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">${t('no_data')}</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map(d => `
+      <tr>
+        <td>${new Date(d.created_at).toLocaleDateString(currentLang === 'fr' ? 'fr-FR' : 'en-US')}</td>
+        <td><strong>${escapeHtml(d.full_name || '')}</strong></td>
+        <td>${escapeHtml(d.email || '')}</td>
+        <td>${escapeHtml(d.requested_service?.substring(0, 30) || '—')}</td>
+        <td>
+          <select class="status-select" data-id="${d.id}" style="padding:6px 12px; border-radius:20px; border:1px solid #e2e8f0; background:white;">
+            <option value="new" ${d.status === 'new' ? 'selected' : ''}>📬 ${statusValues[currentLang].new}</option>
+            <option value="read" ${d.status === 'read' ? 'selected' : ''}>👁️ ${statusValues[currentLang].read}</option>
+            <option value="processed" ${d.status === 'processed' ? 'selected' : ''}>✅ ${statusValues[currentLang].processed}</option>
+          </select>
+        </td>
+        <td>
+          <button class="action-btn view" onclick="showDetailsById(${d.id})"><i class="fas fa-eye"></i></button>
+          <button class="action-btn delete" onclick="deleteDemande(${d.id})"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelectorAll('.status-select').forEach(select => {
+      select.addEventListener('change', (e) => {
+        const id = parseInt(select.dataset.id);
+        const newStatus = select.value;
+        updateStatus(id, newStatus);
+      });
+    });
+  }
+
+  window.showDetailsById = (id) => {
+    const demande = allDemandes.find(d => d.id === id);
+    if (demande) showDetails(demande);
+  };
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
+  }
+
+  // Sélecteur de langue
+  document.querySelectorAll('.lang-switch a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentLang = link.getAttribute('data-lang');
+      localStorage.setItem('adminLang', currentLang);
+      updateUILanguage();
+    });
+  });
+
+  // Déconnexion
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try { await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' }); } catch(e) {}
+    window.location.href = 'admin-login.html';
+  });
+
+  // Filtres
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderTable();
+    });
+  });
+
+  // Modal
+  const modal = document.getElementById('detailModal');
+  document.querySelector('.close-modal').addEventListener('click', () => modal.classList.remove('active'));
+  window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+  // Initialisation
+  updateUILanguage();
+  checkSession();
+</script>
+</body>
+</html>

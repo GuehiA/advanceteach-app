@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Admin Login - AdvanceTeach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3b30b0;
+      --primary-light: #eef2ff;
+      --text: #0f172a;
+      --text-light: #334155;
+      --bg: #f9fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.08);
+      --radius: 24px;
+      --radius-md: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(125deg, #f1f5f9 0%, #eef2ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-container { max-width: 440px; width: 100%; padding: 20px; }
+    .login-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      text-align: center;
+    }
+    .logo-brand { display: inline-flex; align-items: center; gap: 0.8rem; text-decoration: none; margin-bottom: 24px; }
+    .logo-img { height: 45px; width: auto; }
+    .brand-text { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #0f172a 0%, var(--primary) 80%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    .brand-text span { color: var(--primary); background: none; }
+    .login-card h1 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; }
+    .login-card p { color: var(--text-light); margin-bottom: 28px; font-size: 0.9rem; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s;
+      outline: none;
+    }
+    input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .btn-primary {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .message { margin-top: 20px; padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.85rem; display: none; }
+    .message.error { display: block; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .message.success { display: block; background: #ecfdf5; color: #047857; border: 1px solid #bbf7d0; }
+    .lang-switch { margin-top: 24px; display: flex; justify-content: center; gap: 8px; }
+    .lang-switch a { text-decoration: none; color: var(--text-light); font-size: 0.85rem; padding: 4px 8px; border-radius: 20px; }
+    .lang-switch a.active { color: var(--primary); font-weight: 700; background: var(--primary-light); }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <div class="login-card">
+    <a href="index.html" class="logo-brand">
+      <img src="images/logo-advanceteach.png" alt="AdvanceTeach" class="logo-img" onerror="this.src='https://placehold.co/200x60?text=AT'">
+      <div class="brand-text">Advance<span>Teach</span></div>
+    </a>
+    <h1><span data-key="title">Admin Login</span></h1>
+    <p><span data-key="subtitle">Enter your credentials to access the dashboard</span></p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label data-key="emailLabel">Email</label>
+        <input type="email" id="loginEmail" placeholder="admin@advanceteach.com" required>
+      </div>
+      <div class="form-group">
+        <label data-key="passwordLabel">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> <span data-key="loginBtn">Login</span></button>
+    </form>
+
+    <div id="loginMessage" class="message"></div>
+
+    <div class="lang-switch">
+      <a href="#" data-lang="en" class="lang-en active">🇬🇧 EN</a>
+      <a href="#" data-lang="fr" class="lang-fr">🇫🇷 FR</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentLang = localStorage.getItem('adminLang') || 'en';
+
+  const translations = {
+    en: {
+      title: "Admin Login",
+      subtitle: "Enter your credentials to access the dashboard",
+      emailLabel: "Email",
+      passwordLabel: "Password",
+      loginBtn: "Login",
+      loadingBtn: "Loading...",
+      errorMsg: "Invalid email or password",
+      successMsg: "Login successful! Redirecting..."
+    },
+    fr: {
+      title: "Connexion Admin",
+      subtitle: "Entrez vos identifiants pour accéder au tableau de bord",
+      emailLabel: "Email",
+      passwordLabel: "Mot de passe",
+      loginBtn: "Se connecter",
+      loadingBtn: "Chargement...",
+      errorMsg: "Email ou mot de passe incorrect",
+      successMsg: "Connexion réussie ! Redirection..."
+    }
+  };
+
+  function updateUILanguage() {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    document.querySelectorAll('.lang-switch a').forEach(link => {
+      link.classList.toggle('active', link.getAttribute('data-lang') === currentLang);
+    });
+  }
+
+  document.querySelectorAll('.lang-switch a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentLang = link.getAttribute('data-lang');
+      localStorage.setItem('adminLang', currentLang);
+      updateUILanguage();
+    });
+  });
+
+  updateUILanguage();
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const messageDiv = document.getElementById('loginMessage');
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    messageDiv.className = 'message';
+    messageDiv.innerHTML = '';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> ${translations[currentLang].loadingBtn}`;
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        messageDiv.className = 'message success';
+        messageDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${translations[currentLang].successMsg}`;
+        setTimeout(() => {
+          window.location.href = 'admin-dashboard.html';
+        }, 1000);
+      } else {
+        messageDiv.className = 'message error';
+        messageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${data.message || translations[currentLang].errorMsg}`;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> ${translations[currentLang].loginBtn}`;
+      }
+    } catch (error) {
+      messageDiv.className = 'message error';
+      messageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${translations[currentLang].errorMsg}`;
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> ${translations[currentLang].loginBtn}`;
+    }
+  });
+</script>
+</body>
+</html>

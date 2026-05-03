@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach</title>
+  <meta name="description" content="AdvanceTeach quote request" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+
+      <div class="hero-buttons">
+        <a href="#quoteFormSection" class="btn btn-primary">
+          <i class="fas fa-file-signature"></i>
+          <span data-key="startQuoteBtn">Start your request</span>
+        </a>
+        <a href="contact.html" class="btn btn-secondary">
+          <i class="fas fa-headset"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img
+        id="heroImage"
+        src="images/devis-hero.jpg"
+        alt="Quote request"
+        class="hero-logo"
+        onerror="this.src='https://placehold.co/520x340?text=Quote+Request'"
+      >
+    </div>
+  </div>
+</section>
+
+<section class="home-intro" id="quoteFormSection">
+  <div class="section-container">
+    <div class="form-card">
+      <h2 data-key="formTitle">Request a quote</h2>
+      <p class="subtitle" data-key="formSubtitle">
+        Tell us about your project and we will get back to you with a tailored proposal.
+      </p>
+
+      <form id="quoteForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fullName" data-key="fullName">Full name</label>
+            <input type="text" id="fullName" required>
+          </div>
+
+          <div class="form-group">
+            <label for="organization" data-key="organization">Organization</label>
+            <input type="text" id="organization">
+          </div>
+
+          <div class="form-group">
+            <label for="email" data-key="email">Email</label>
+            <input type="email" id="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" data-key="phone">Phone</label>
+            <input type="text" id="phone">
+          </div>
+
+          <div class="form-group">
+            <label for="requestedService" data-key="requestedService">Requested service</label>
+            <input type="text" id="requestedService" data-placeholder-key="requestedServicePlaceholder" placeholder="AI consulting, training, platform...">
+          </div>
+
+          <div class="form-group">
+            <label for="estimatedBudget" data-key="estimatedBudget">Estimated budget</label>
+            <input type="text" id="estimatedBudget" data-placeholder-key="estimatedBudgetPlaceholder" placeholder="Example: 3000 EUR">
+          </div>
+
+          <div class="form-group full">
+            <label for="desiredTimeline" data-key="desiredTimeline">Desired timeline</label>
+            <input type="text" id="desiredTimeline" data-placeholder-key="desiredTimelinePlaceholder" placeholder="Example: 1 month / 3 months / flexible">
+          </div>
+
+          <div class="form-group full">
+            <label for="projectDescription" data-key="projectDescription">Project description</label>
+            <textarea id="projectDescription" required data-placeholder-key="projectDescriptionPlaceholder" placeholder="Describe your needs, goals and expectations..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <i class="fas fa-paper-plane"></i>
+            <span data-key="submitBtn">Send request</span>
+          </button>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  const translations = {
+    en: {
+      pageTitleTag: "AdvanceTeach | Quote",
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      quote: "Quote",
+      contact: "Contact",
+
+      startQuoteBtn: "Start your request",
+      contactBtn: "Contact us",
+
+      formTitle: "Request a quote",
+      formSubtitle: "Tell us about your project and we will get back to you with a tailored proposal.",
+      fullName: "Full name",
+      organization: "Organization",
+      email: "Email",
+      phone: "Phone",
+      requestedService: "Requested service",
+      estimatedBudget: "Estimated budget",
+      desiredTimeline: "Desired timeline",
+      projectDescription: "Project description",
+      submitBtn: "Send request",
+
+      requestedServicePlaceholder: "AI consulting, training, platform...",
+      estimatedBudgetPlaceholder: "Example: 3000 EUR",
+      desiredTimelinePlaceholder: "Example: 1 month / 3 months / flexible",
+      projectDescriptionPlaceholder: "Describe your needs, goals and expectations...",
+
+      sending: "Sending...",
+      successMessage: "Your quote request has been sent successfully.",
+      errorMessage: "An error occurred. Please try again.",
+      requiredMessage: "Please fill in the required fields.",
+
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+
+      defaultHeroTitle: "Request a tailored quote",
+      defaultHeroText: "Tell us about your needs and AdvanceTeach will prepare a solution adapted to your goals, context and timeline."
+    },
+
+    fr: {
+      pageTitleTag: "AdvanceTeach | Devis",
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      quote: "Devis",
+      contact: "Contact",
+
+      startQuoteBtn: "Commencer votre demande",
+      contactBtn: "Nous contacter",
+
+      formTitle: "Demander un devis",
+      formSubtitle: "Présentez-nous votre projet et nous reviendrons vers vous avec une proposition adaptée.",
+      fullName: "Nom complet",
+      organization: "Organisation",
+      email: "Email",
+      phone: "Téléphone",
+      requestedService: "Service demandé",
+      estimatedBudget: "Budget estimé",
+      desiredTimeline: "Délai souhaité",
+      projectDescription: "Description du projet",
+      submitBtn: "Envoyer la demande",
+
+      requestedServicePlaceholder: "Consultance IA, formation, plateforme...",
+      estimatedBudgetPlaceholder: "Exemple : 3000 EUR",
+      desiredTimelinePlaceholder: "Exemple : 1 mois / 3 mois / flexible",
+      projectDescriptionPlaceholder: "Décrivez vos besoins, objectifs et attentes...",
+
+      sending: "Envoi...",
+      successMessage: "Votre demande de devis a bien été envoyée.",
+      errorMessage: "Une erreur est survenue. Veuillez réessayer.",
+      requiredMessage: "Veuillez remplir les champs obligatoires.",
+
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+
+      defaultHeroTitle: "Demandez un devis sur mesure",
+      defaultHeroText: "Présentez vos besoins et AdvanceTeach préparera une solution adaptée à vos objectifs, votre contexte et votre calendrier."
+    }
+  };
+
+  let currentLang = 'en';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function updateLocalTexts() {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+      const key = el.getAttribute('data-placeholder-key');
+      if (translations[currentLang][key]) {
+        el.setAttribute('placeholder', translations[currentLang][key]);
+      }
+    });
+  }
+
+  async function loadQuotePageContent() {
+    try {
+      const response = await fetch(`/api/pages/devis?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.data) {
+        throw new Error('Quote page load failed');
+      }
+
+      const page = result.data;
+
+      document.getElementById('pageTitle').textContent =
+        page.title || t('defaultHeroTitle');
+
+      document.getElementById('pageContent').textContent =
+        page.content || t('defaultHeroText');
+
+      document.title = page.meta_title || t('pageTitleTag');
+
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', page.meta_description || t('defaultHeroText'));
+
+      if (page.hero_image) {
+        document.getElementById('heroImage').src = page.hero_image;
+      }
+    } catch (error) {
+      document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = t('defaultHeroText');
+      document.title = t('pageTitleTag');
+    }
+  }
+
+  function showMessage(type, text) {
+    const box = document.getElementById('formMessage');
+    box.className = `message ${type}`;
+    box.innerHTML = text;
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById('submitBtn');
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const projectDescription = document.getElementById('projectDescription').value.trim();
+
+    if (!fullName || !email || !projectDescription) {
+      showMessage('error', t('requiredMessage'));
+      return;
+    }
+
+    const payload = {
+      full_name: fullName,
+      organization: document.getElementById('organization').value.trim(),
+      email: email,
+      phone: document.getElementById('phone').value.trim(),
+      requested_service: document.getElementById('requestedService').value.trim(),
+      estimated_budget: document.getElementById('estimatedBudget').value.trim(),
+      desired_timeline: document.getElementById('desiredTimeline').value.trim(),
+      project_description: projectDescription,
+      language: currentLang
+    };
+
+    const originalHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> ${t('sending')}`;
+
+    try {
+      const response = await fetch('/api/devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || t('errorMessage'));
+      }
+
+      document.getElementById('quoteForm').reset();
+      showMessage('success', t('successMessage'));
+    } catch (error) {
+      showMessage('error', error.message || t('errorMessage'));
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalHtml;
+      updateLocalTexts();
+    }
+  }
+
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+    updateLocalTexts();
+    await loadQuotePageContent();
+  }
+
+  (async function init() {
+    currentLang = await initGlobalLayout(translations, refreshPage);
+    document.getElementById('quoteForm').addEventListener('submit', handleSubmit);
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>

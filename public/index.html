@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach</title>
+  <meta name="description" content="AdvanceTeach" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Styles pour le bloc services */
+    .services-block {
+      margin: 3rem 0;
+    }
+    .services-intro {
+      margin-bottom: 2rem;
+    }
+    .services-intro h2 {
+      margin-bottom: 1rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .services-description {
+      color: #3a4b6e;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- HERO (depuis pages) -->
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+      <div class="hero-buttons">
+        <a href="devis.html" class="btn btn-primary">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span data-key="quoteBtn">Request a quote</span>
+        </a>
+        <a href="contact.html" class="btn btn-secondary">
+          <i class="fas fa-headset"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img id="heroImage" src="images/hero-ai-education.jpg" alt="AdvanceTeach" class="hero-logo" onerror="this.src='https://placehold.co/520x340?text=AI+Education'">
+    </div>
+  </div>
+</section>
+
+<!-- BLOC SERVICES (maintenant en premier) -->
+<section class="services-block">
+  <div class="section-container">
+    <div class="services-intro">
+      <h2 id="servicesSectionTitle" data-key="servicesTitle">Our services</h2>
+      <p id="servicesSectionText" class="services-description"></p>
+    </div>
+    <div class="services-grid" id="servicesCards">
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3 data-key="loading">Loading...</h3>
+        <p data-key="loadingText">Please wait.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTIONS DYNAMIQUES (après le bloc services) -->
+<div id="dynamicSections"></div>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  let currentLang = 'en';
+  let currentSections = [];
+
+  const translations = {
+    en: {
+      pageTitleTag: "AdvanceTeach | AI & Intelligent Training",
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      research: "Research",
+      offers: "Offers",
+      quote: "Quote",
+      contact: "Contact",
+      quoteBtn: "Request a quote",
+      contactBtn: "Contact us",
+      ctaQuoteBtn: "Request a quote",
+      ctaContactBtn: "Write to AdvanceTeach",
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+      loading: "Loading...",
+      loadingText: "Please wait.",
+      noServices: "No services available at the moment.",
+      noServicesText: "New services will appear here soon.",
+      errorTitle: "Unable to load content",
+      errorText: "Please try again later.",
+      defaultHeroTitle: "AI Consulting & Educational Solutions",
+      defaultHeroText: "AdvanceTeach designs intelligent platforms, trains in AI usage, and supports digital transformation for educational and professional organizations.",
+      servicesTitle: "Our services",
+      servicesText: "Discover our range of services designed to meet your specific needs in AI, training and digital transformation."
+    },
+    fr: {
+      pageTitleTag: "AdvanceTeach | IA et formation intelligente",
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      research: "Recherche",
+      offers: "Offres",
+      quote: "Devis",
+      contact: "Contact",
+      quoteBtn: "Demander un devis",
+      contactBtn: "Nous contacter",
+      ctaQuoteBtn: "Demander un devis",
+      ctaContactBtn: "Écrire à AdvanceTeach",
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+      loading: "Chargement...",
+      loadingText: "Veuillez patienter.",
+      noServices: "Aucun service disponible pour le moment.",
+      noServicesText: "De nouveaux services apparaîtront ici bientôt.",
+      errorTitle: "Impossible de charger le contenu",
+      errorText: "Veuillez réessayer plus tard.",
+      defaultHeroTitle: "Conseil en IA et solutions éducatives",
+      defaultHeroText: "AdvanceTeach conçoit des plateformes intelligentes, forme aux usages de l’IA et accompagne la transformation numérique des organisations éducatives et professionnelles.",
+      servicesTitle: "Nos services",
+      servicesText: "Découvrez notre gamme de services conçus pour répondre à vos besoins spécifiques en IA, formation et transformation numérique."
+    }
+  };
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  function escapeAttribute(text) {
+    return escapeHtml(text).replace(/'/g, '&#39;');
+  }
+
+  // Charge le contenu du hero (depuis pages)
+  async function loadHomePage() {
+    try {
+      const response = await fetch(`/api/pages/home?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (response.ok && result.success && result.data) {
+        const page = result.data;
+        document.getElementById('pageTitle').textContent = page.title || t('defaultHeroTitle');
+        document.getElementById('pageContent').textContent = page.content || t('defaultHeroText');
+        document.title = page.meta_title || t('pageTitleTag');
+
+        let meta = document.querySelector('meta[name="description"]');
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.setAttribute('name', 'description');
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', page.meta_description || t('defaultHeroText'));
+
+        if (page.hero_image) {
+          document.getElementById('heroImage').src = page.hero_image;
+        }
+      } else {
+        document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+        document.getElementById('pageContent').textContent = t('defaultHeroText');
+        document.title = t('pageTitleTag');
+      }
+    } catch (error) {
+      console.error("Error loading page content:", error);
+      document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = t('defaultHeroText');
+      document.title = t('pageTitleTag');
+    }
+  }
+
+  // Charge les sections dynamiques (depuis /api/sections/home)
+  async function loadHomeSections() {
+    try {
+      const response = await fetch(`/api/sections/home?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (response.ok && result.success && Array.isArray(result.data)) {
+        currentSections = result.data;
+      } else {
+        currentSections = [];
+      }
+    } catch (error) {
+      console.error("Error loading sections:", error);
+      currentSections = [];
+    }
+  }
+
+  // Affiche les sections dynamiques de manière générique
+  function renderDynamicSections() {
+    const container = document.getElementById('dynamicSections');
+    if (!container) return;
+
+    if (!currentSections.length) {
+      container.innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = currentSections
+      .filter(section => section.section_key !== 'services_intro') // Exclut la section services_intro
+      .map(section => {
+        const title = escapeHtml(section.title || '');
+        const content = escapeHtml(section.content || '');
+        const buttonText = escapeHtml(section.button_text || '');
+        const buttonLink = escapeAttribute(section.button_link || 'contact.html');
+        const imagePath = escapeAttribute(section.image_path || 'https://placehold.co/500x280?text=AdvanceTeach');
+
+        if (section.section_type === 'cta') {
+          return `
+            <section class="home-intro">
+              <div class="section-container cta-block">
+                <h2>${title}</h2>
+                <p>${content}</p>
+                <div class="hero-buttons" style="justify-content: center;">
+                  <a href="${buttonLink}" class="btn btn-primary">
+                    <i class="fas fa-file-signature"></i>
+                    <span>${buttonText || t('ctaQuoteBtn')}</span>
+                  </a>
+                </div>
+              </div>
+            </section>
+          `;
+        }
+
+        if (section.section_type === 'text' || section.section_type === 'cards_intro') {
+          return `
+            <section class="home-intro">
+              <div class="section-container">
+                <h2>${title}</h2>
+                <p style="margin-top:1.5rem; color:#3a4b6e;">${content}</p>
+              </div>
+            </section>
+          `;
+        }
+
+        if (section.section_type === 'hero_extra') {
+          return `
+            <section class="home-intro">
+              <div class="section-container">
+                <div class="card">
+                  ${imagePath ? `<img src="${imagePath}" alt="${title}" class="card-image" onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'">` : ''}
+                  <h3>${title}</h3>
+                  <p>${content}</p>
+                  ${buttonText ? `
+                    <a href="${buttonLink}" class="btn btn-primary" style="margin-top: 1rem;">
+                      <i class="fas fa-arrow-right"></i>
+                      <span>${buttonText}</span>
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+            </section>
+          `;
+        }
+
+        return `
+          <section class="home-intro">
+            <div class="section-container">
+              <div class="card">
+                <h3>${title}</h3>
+                <p>${content}</p>
+              </div>
+            </div>
+          </section>
+        `;
+      }).join('');
+  }
+
+  // Met à jour le titre et le texte d'introduction des services
+  function updateServicesIntro() {
+    const servicesIntro = currentSections.find(section => section.section_key === 'services_intro');
+
+    if (servicesIntro) {
+      document.getElementById('servicesSectionTitle').textContent =
+        servicesIntro.title || t('servicesTitle');
+
+      const textEl = document.getElementById('servicesSectionText');
+      if (textEl) {
+        textEl.textContent = servicesIntro.content || t('servicesText');
+        textEl.classList.add('services-description');
+      }
+    } else {
+      document.getElementById('servicesSectionTitle').textContent = t('servicesTitle');
+
+      const textEl = document.getElementById('servicesSectionText');
+      if (textEl) {
+        textEl.textContent = t('servicesText');
+        textEl.classList.add('services-description');
+      }
+    }
+  }
+
+  // Charge et affiche les services (cartes)
+  function renderServices(services) {
+    const container = document.getElementById('servicesCards');
+
+    if (!services.length) {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-info"></i>
+          <h3>${escapeHtml(t('noServices'))}</h3>
+          <p>${escapeHtml(t('noServicesText'))}</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = services.map(service => `
+      <div class="card">
+        <img
+          src="${escapeAttribute(service.image_path || 'https://placehold.co/500x280?text=AdvanceTeach')}"
+          alt="${escapeAttribute(service.title || 'Service')}"
+          class="card-image"
+          onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'"
+        >
+        <i class="${escapeAttribute(service.icon || 'fas fa-cogs')}"></i>
+        <h3>${escapeHtml(service.title || '')}</h3>
+        <p>${escapeHtml(service.short_description || '')}</p>
+      </div>
+    `).join('');
+  }
+
+  async function loadServices() {
+    const container = document.getElementById('servicesCards');
+    container.innerHTML = `
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>${escapeHtml(t('loading'))}</h3>
+        <p>${escapeHtml(t('loadingText'))}</p>
+      </div>
+    `;
+
+    try {
+      const response = await fetch(`/api/services?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !Array.isArray(result.data)) {
+        throw new Error('Services load failed');
+      }
+
+      renderServices(result.data);
+    } catch (error) {
+      console.error("Error loading services:", error);
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-exclamation"></i>
+          <h3>${escapeHtml(t('errorTitle'))}</h3>
+          <p>${escapeHtml(t('errorText'))}</p>
+        </div>
+      `;
+    }
+  }
+
+  // Rafraîchit toute la page
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+
+    // Met à jour les éléments avec data-key
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    await Promise.all([
+      loadHomePage(),
+      loadHomeSections(),
+      loadServices()
+    ]);
+
+    // Affiche les sections dynamiques et met à jour l'intro des services
+    renderDynamicSections();
+    updateServicesIntro();
+  }
+
+  // Initialisation
+  (async function init() {
+    if (typeof initGlobalLayout === 'function') {
+      currentLang = await initGlobalLayout(translations, refreshPage);
+    }
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>

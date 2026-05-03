@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach</title>
+  <meta name="description" content="AdvanceTeach offers" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+
+      <div class="hero-buttons">
+        <a href="contact.html" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+        <a href="devis.html" class="btn btn-secondary">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span data-key="quoteBtn">Request a quote</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img
+        id="heroImage"
+        src="images/offers-hero.jpg"
+        alt="Offers"
+        class="hero-logo"
+        onerror="this.src='https://placehold.co/520x340?text=Offers'"
+      >
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container">
+    <h2><span data-key="offersSectionTitle">Current offers</span></h2>
+    <div class="cards" id="offersGrid">
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3 data-key="loading">Loading...</h3>
+        <p data-key="loadingText">Please wait.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container cta-block">
+    <h2><span data-key="ctaTitle">Let’s respond to opportunities together</span></h2>
+    <p><span data-key="ctaDesc">AdvanceTeach can support partnerships, submissions, smart platforms and strategic responses around published opportunities.</span></p>
+
+    <div class="hero-buttons" style="justify-content: center;">
+      <a href="contact.html" class="btn btn-primary">
+        <i class="fas fa-paper-plane"></i>
+        <span data-key="ctaContactBtn">Write to AdvanceTeach</span>
+      </a>
+      <a href="devis.html" class="btn btn-secondary">
+        <i class="fas fa-file-signature"></i>
+        <span data-key="ctaQuoteBtn">Request a quote</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  const translations = {
+    en: {
+      pageTitleTag: "AdvanceTeach | Offers",
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      quote: "Quote",
+      contact: "Contact",
+
+      quoteBtn: "Request a quote",
+      contactBtn: "Contact us",
+
+      offersSectionTitle: "Current offers",
+      ctaTitle: "Let’s respond to opportunities together",
+      ctaDesc: "AdvanceTeach can support partnerships, submissions, smart platforms and strategic responses around published opportunities.",
+      ctaContactBtn: "Write to AdvanceTeach",
+      ctaQuoteBtn: "Request a quote",
+
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+
+      loading: "Loading...",
+      loadingText: "Please wait.",
+      noOffers: "No published offers are available at the moment.",
+      noOffersText: "New offers will appear here soon.",
+      errorTitle: "Unable to load offers",
+      errorText: "Please try again later.",
+
+      defaultHeroTitle: "Published offers and opportunities",
+      defaultHeroText: "Discover current opportunities, offers and calls where AdvanceTeach can support innovation, learning and intelligent digital transformation.",
+      statusLabel: "Status",
+      expiresLabel: "Expires",
+      openDocument: "Open document"
+    },
+
+    fr: {
+      pageTitleTag: "AdvanceTeach | Appels d’offres",
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      quote: "Devis",
+      contact: "Contact",
+
+      quoteBtn: "Demander un devis",
+      contactBtn: "Nous contacter",
+
+      offersSectionTitle: "Offres et opportunités en cours",
+      ctaTitle: "Répondons ensemble aux opportunités",
+      ctaDesc: "AdvanceTeach peut accompagner les partenariats, soumissions, plateformes intelligentes et réponses stratégiques autour des opportunités publiées.",
+      ctaContactBtn: "Écrire à AdvanceTeach",
+      ctaQuoteBtn: "Demander un devis",
+
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+
+      loading: "Chargement...",
+      loadingText: "Veuillez patienter.",
+      noOffers: "Aucune offre publiée n’est disponible pour le moment.",
+      noOffersText: "De nouvelles offres apparaîtront ici bientôt.",
+      errorTitle: "Impossible de charger les offres",
+      errorText: "Veuillez réessayer plus tard.",
+
+      defaultHeroTitle: "Offres et opportunités publiées",
+      defaultHeroText: "Découvrez les opportunités, offres et appels pour lesquels AdvanceTeach peut accompagner l’innovation, la formation et la transformation numérique intelligente.",
+      statusLabel: "Statut",
+      expiresLabel: "Expire le",
+      openDocument: "Ouvrir le document"
+    }
+  };
+
+  let currentLang = 'en';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  function escapeAttribute(text) {
+    return escapeHtml(text).replace(/'/g, '&#39;');
+  }
+
+  async function loadPageContent() {
+    try {
+      const response = await fetch(`/api/pages/offers?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.data) {
+        throw new Error('Offers page load failed');
+      }
+
+      const page = result.data;
+
+      document.getElementById('pageTitle').textContent = page.title || t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = page.content || t('defaultHeroText');
+      document.title = page.meta_title || t('pageTitleTag');
+
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', page.meta_description || t('defaultHeroText'));
+
+      if (page.hero_image) {
+        document.getElementById('heroImage').src = page.hero_image;
+      }
+    } catch {
+      document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = t('defaultHeroText');
+      document.title = t('pageTitleTag');
+    }
+  }
+
+  function formatDate(value) {
+    if (!value) return '';
+    const locale = currentLang === 'fr' ? 'fr-FR' : 'en-CA';
+    return new Date(value).toLocaleDateString(locale);
+  }
+
+  function renderOffers(offers) {
+    const container = document.getElementById('offersGrid');
+
+    if (!offers.length) {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-info"></i>
+          <h3>${escapeHtml(t('noOffers'))}</h3>
+          <p>${escapeHtml(t('noOffersText'))}</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = offers.map(offer => `
+      <div class="card">
+        <img
+          src="${escapeAttribute(offer.image_path || 'https://placehold.co/500x280?text=AdvanceTeach')}"
+          alt="${escapeAttribute(offer.title || 'Offer')}"
+          class="card-image"
+          onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'"
+        >
+        <i class="fas fa-tags"></i>
+        <h3>${escapeHtml(offer.title || '')}</h3>
+        <p>${escapeHtml(offer.short_description || '')}</p>
+        ${offer.status ? `<p><strong>${escapeHtml(t('statusLabel'))}:</strong> ${escapeHtml(offer.status)}</p>` : ''}
+        ${offer.expires_at ? `<p><strong>${escapeHtml(t('expiresLabel'))}:</strong> ${escapeHtml(formatDate(offer.expires_at))}</p>` : ''}
+        ${offer.document_path ? `
+          <a class="btn btn-secondary" href="${escapeAttribute(offer.document_path)}" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-arrow-down"></i> ${escapeHtml(t('openDocument'))}
+          </a>
+        ` : ''}
+      </div>
+    `).join('');
+  }
+
+  async function loadOffers() {
+    const container = document.getElementById('offersGrid');
+    container.innerHTML = `
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>${escapeHtml(t('loading'))}</h3>
+        <p>${escapeHtml(t('loadingText'))}</p>
+      </div>
+    `;
+
+    try {
+      const response = await fetch(`/api/offres?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !Array.isArray(result.data)) {
+        throw new Error('Offers load failed');
+      }
+
+      renderOffers(result.data);
+    } catch {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-exclamation"></i>
+          <h3>${escapeHtml(t('errorTitle'))}</h3>
+          <p>${escapeHtml(t('errorText'))}</p>
+        </div>
+      `;
+    }
+  }
+
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    await loadPageContent();
+    await loadOffers();
+  }
+
+  (async function init() {
+    currentLang = await initGlobalLayout(translations, refreshPage);
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>

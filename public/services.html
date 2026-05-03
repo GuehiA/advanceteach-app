@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach | Services</title>
+  <meta name="description" content="AdvanceTeach services" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- HERO (depuis pages) -->
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+      <div class="hero-buttons">
+        <a href="devis.html" class="btn btn-primary">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span data-key="quoteBtn">Request a quote</span>
+        </a>
+        <a href="contact.html" class="btn btn-secondary">
+          <i class="fas fa-headset"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img id="heroImage" src="images/services-hero.jpg" alt="AdvanceTeach Services" class="hero-logo" onerror="this.src='https://placehold.co/520x340?text=Services'">
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES DYNAMIQUES (depuis /api/services) -->
+<section class="home-intro">
+  <div class="section-container">
+    <h2 data-key="servicesTitle">Our services</h2>
+    <div class="cards" id="servicesGrid">
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3 data-key="loading">Loading...</h3>
+        <p data-key="loadingText">Please wait.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FIXE (bilingue) -->
+<section class="cta-block">
+  <div class="section-container">
+    <h2 data-key="servicesCtaTitle">Need a tailored solution?</h2>
+    <p data-key="servicesCtaText">Tell us about your project and we will guide you.</p>
+    <div class="hero-buttons" style="justify-content: center;">
+      <a href="devis.html" class="btn btn-primary">
+        <i class="fas fa-file-signature"></i>
+        <span data-key="requestQuote">Request a quote</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  // Traductions COMPLÈTES (incluant header/footer global + CTA fixe)
+  const translations = {
+    en: {
+      // Header/Menu global
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      research: "Research",
+      offers: "Offers",
+      quote: "Quote",
+      contact: "Contact",
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+
+      // Page spécifique
+      pageTitleTag: "AdvanceTeach | Services",
+      quoteBtn: "Request a quote",
+      contactBtn: "Contact us",
+      servicesTitle: "Our services",
+      loading: "Loading...",
+      loadingText: "Please wait.",
+      noServices: "No services available at the moment.",
+      noServicesText: "New services will appear here soon.",
+      errorTitle: "Unable to load services",
+      errorText: "Please try again later.",
+      defaultHeroTitle: "Services designed for real-world impact",
+      defaultHeroText: "AdvanceTeach provides AI consulting, intelligent platforms and professional learning solutions.",
+
+      // CTA fixe
+      servicesCtaTitle: "Need a tailored solution?",
+      servicesCtaText: "Tell us about your project and we will guide you.",
+      requestQuote: "Request a quote"
+    },
+    fr: {
+      // Header/Menu global
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      research: "Recherche",
+      offers: "Offres",
+      quote: "Devis",
+      contact: "Contact",
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+
+      // Page spécifique
+      pageTitleTag: "AdvanceTeach | Services",
+      quoteBtn: "Demander un devis",
+      contactBtn: "Nous contacter",
+      servicesTitle: "Nos services",
+      loading: "Chargement...",
+      loadingText: "Veuillez patienter.",
+      noServices: "Aucun service disponible pour le moment.",
+      noServicesText: "De nouveaux services apparaîtront ici bientôt.",
+      errorTitle: "Impossible de charger les services",
+      errorText: "Veuillez réessayer plus tard.",
+      defaultHeroTitle: "Des services conçus pour un impact concret",
+      defaultHeroText: "AdvanceTeach propose du conseil en IA, des plateformes intelligentes et des solutions de formation professionnelle.",
+
+      // CTA fixe
+      servicesCtaTitle: "Besoin d'une solution sur mesure ?",
+      servicesCtaText: "Parlez-nous de votre projet et nous vous guiderons.",
+      requestQuote: "Demander un devis"
+    }
+  };
+
+  let currentLang = 'en';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  // Échappement HTML pour sécurité
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  // Charge le contenu du hero (depuis pages)
+  async function loadPageContent() {
+    try {
+      const response = await fetch(`/api/pages/services?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (response.ok && result.success && result.data) {
+        const page = result.data;
+        document.getElementById('pageTitle').textContent = page.title || translations[currentLang].defaultHeroTitle;
+        document.getElementById('pageContent').textContent = page.content || translations[currentLang].defaultHeroText;
+        document.title = page.meta_title || translations[currentLang].pageTitleTag;
+
+        if (page.hero_image) {
+          document.getElementById('heroImage').src = page.hero_image;
+        }
+      } else {
+        document.getElementById('pageTitle').textContent = translations[currentLang].defaultHeroTitle;
+        document.getElementById('pageContent').textContent = translations[currentLang].defaultHeroText;
+        document.title = translations[currentLang].pageTitleTag;
+      }
+    } catch (error) {
+      console.error("Error loading page content:", error);
+      document.getElementById('pageTitle').textContent = translations[currentLang].defaultHeroTitle;
+      document.getElementById('pageContent').textContent = translations[currentLang].defaultHeroText;
+      document.title = translations[currentLang].pageTitleTag;
+    }
+  }
+
+  // Charge les services dynamiques (cartes)
+  async function loadServices() {
+    const container = document.getElementById('servicesGrid');
+    container.innerHTML = `
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>${translations[currentLang].loading}</h3>
+        <p>${translations[currentLang].loadingText}</p>
+      </div>
+    `;
+
+    try {
+      const response = await fetch(`/api/services?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (response.ok && result.success && Array.isArray(result.data)) {
+        if (result.data.length > 0) {
+          container.innerHTML = result.data.map(service => `
+            <div class="card">
+              <img src="${service.image_path || 'https://placehold.co/500x280?text=AdvanceTeach'}"
+                   alt="${service.title || 'Service'}"
+                   class="card-image"
+                   onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'">
+              <i class="${service.icon || 'fas fa-cogs'}"></i>
+              <h3>${service.title || ''}</h3>
+              <p>${service.short_description || ''}</p>
+            </div>
+          `).join('');
+        } else {
+          container.innerHTML = `
+            <div class="card">
+              <i class="fas fa-circle-info"></i>
+              <h3>${translations[currentLang].noServices}</h3>
+              <p>${translations[currentLang].noServicesText}</p>
+            </div>
+          `;
+        }
+      } else {
+        throw new Error('Failed to load services');
+      }
+    } catch (error) {
+      console.error("Error loading services:", error);
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-exclamation"></i>
+          <h3>${translations[currentLang].errorTitle}</h3>
+          <p>${translations[currentLang].errorText}</p>
+        </div>
+      `;
+    }
+  }
+
+  // Rafraîchit toute la page
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+
+    // Met à jour les éléments avec data-key (y compris header/footer)
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    await Promise.all([
+      loadPageContent(),
+      loadServices()
+    ]);
+  }
+
+  // Initialisation
+  (async function init() {
+    if (typeof initGlobalLayout === 'function') {
+      currentLang = await initGlobalLayout(translations, refreshPage);
+    }
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>

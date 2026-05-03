@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach | Contact</title>
+  <meta name="description" content="AdvanceTeach contact" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Assure que le footer reste en bas */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .page-content {
+      flex: 1;
+    }
+    .message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 16px;
+      display: none;
+    }
+    .message.success {
+      display: block;
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #34d399;
+    }
+    .message.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #f87171;
+    }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <div class="page-content">
+    <!-- HERO (depuis pages) -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-text">
+          <h1 id="pageTitle">Loading...</h1>
+          <p id="pageContent">Loading...</p>
+          <div class="hero-buttons">
+            <a href="#contactFormSection" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i>
+              <span data-key="startContactBtn">Write to us</span>
+            </a>
+            <a href="devis.html" class="btn btn-secondary">
+              <i class="fas fa-file-invoice-dollar"></i>
+              <span data-key="quoteBtn">Request a quote</span>
+            </a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img id="heroImage" src="images/contact-hero.jpg" alt="Contact AdvanceTeach" class="hero-logo" onerror="this.src='https://placehold.co/520x340?text=Contact+AdvanceTeach'">
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTIONS DYNAMIQUES (depuis /api/sections/contact) -->
+    <div id="dynamicSections"></div>
+
+    <!-- FORMULAIRE DE CONTACT -->
+    <section class="home-intro" id="contactFormSection">
+      <div class="section-container">
+        <div class="form-card">
+          <h2 data-key="formTitle">Contact us</h2>
+          <p class="subtitle" data-key="formSubtitle">
+            Send us your message and we will get back to you as soon as possible.
+          </p>
+
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fullName" data-key="fullName">Full name</label>
+                <input type="text" id="fullName" required>
+              </div>
+
+              <div class="form-group">
+                <label for="organization" data-key="organization">Organization</label>
+                <input type="text" id="organization">
+              </div>
+
+              <div class="form-group">
+                <label for="email" data-key="email">Email</label>
+                <input type="email" id="email" required>
+              </div>
+
+              <div class="form-group">
+                <label for="phone" data-key="phone">Phone</label>
+                <input type="text" id="phone">
+              </div>
+
+              <div class="form-group">
+                <label for="subject" data-key="subject">Subject</label>
+                <input type="text" id="subject" data-placeholder-key="subjectPlaceholder" placeholder="Your subject">
+              </div>
+
+              <div class="form-group">
+                <label for="requestType" data-key="requestType">Request type</label>
+                <select id="requestType">
+                  <option value="contact">Contact</option>
+                  <option value="information">Information</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="support">Support</option>
+                </select>
+              </div>
+
+              <div class="form-group full">
+                <label for="message" data-key="message">Message</label>
+                <textarea id="message" required data-placeholder-key="messagePlaceholder" placeholder="Tell us about your needs..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitBtn">
+                <i class="fas fa-paper-plane"></i>
+                <span data-key="submitBtn">Send message</span>
+              </button>
+            </div>
+
+            <div id="formMessage" class="message"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="site-footer"></div>
+
+  <script src="/js/layout.js"></script>
+  <script>
+    const translations = {
+      en: {
+        // Menu global
+        home: "Home",
+        about: "About",
+        services: "Services",
+        projects: "Projects",
+        trainings: "Trainings",
+        research: "Research",
+        offers: "Offers",
+        quote: "Quote",
+        contact: "Contact",
+
+        // Page spécifique
+        pageTitleTag: "AdvanceTeach | Contact",
+        startContactBtn: "Write to us",
+        quoteBtn: "Request a quote",
+        formTitle: "Contact us",
+        formSubtitle: "Send us your message and we will get back to you as soon as possible.",
+        fullName: "Full name",
+        organization: "Organization",
+        email: "Email",
+        phone: "Phone",
+        subject: "Subject",
+        requestType: "Request type",
+        message: "Message",
+        submitBtn: "Send message",
+        subjectPlaceholder: "Your subject",
+        messagePlaceholder: "Tell us about your needs...",
+        sending: "Sending...",
+        successMessage: "Your message has been sent successfully.",
+        errorMessage: "An error occurred. Please try again.",
+        requiredMessage: "Please fill in the required fields.",
+        footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+        defaultHeroTitle: "Let's start the conversation",
+        defaultHeroText: "Contact AdvanceTeach to discuss AI consulting, intelligent platforms, training or a specific collaboration need."
+      },
+      fr: {
+        // Menu global
+        home: "Accueil",
+        about: "À propos",
+        services: "Services",
+        projects: "Réalisations",
+        trainings: "Formations",
+        research: "Recherche",
+        offers: "Offres",
+        quote: "Devis",
+        contact: "Contact",
+
+        // Page spécifique
+        pageTitleTag: "AdvanceTeach | Contact",
+        startContactBtn: "Écrivez-nous",
+        quoteBtn: "Demander un devis",
+        formTitle: "Nous contacter",
+        formSubtitle: "Envoyez-nous votre message et nous reviendrons vers vous dès que possible.",
+        fullName: "Nom complet",
+        organization: "Organisation",
+        email: "Email",
+        phone: "Téléphone",
+        subject: "Sujet",
+        requestType: "Type de demande",
+        message: "Message",
+        submitBtn: "Envoyer le message",
+        subjectPlaceholder: "Votre sujet",
+        messagePlaceholder: "Décrivez vos besoins...",
+        sending: "Envoi...",
+        successMessage: "Votre message a bien été envoyé.",
+        errorMessage: "Une erreur est survenue. Veuillez réessayer.",
+        requiredMessage: "Veuillez remplir les champs obligatoires.",
+        footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+        defaultHeroTitle: "Entamons la conversation",
+        defaultHeroText: "Contactez AdvanceTeach pour parler de conseil IA, plateformes intelligentes, formation ou d'un besoin spécifique de collaboration."
+      }
+    };
+
+    let currentLang = 'en';
+    let currentSections = [];
+
+    function t(key) {
+      return translations[currentLang][key] || key;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/[&<>"]/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;'
+      }[char]));
+    }
+
+    function escapeAttribute(text) {
+      return escapeHtml(text).replace(/'/g, '&#39;');
+    }
+
+    function updateLocalTexts() {
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (translations[currentLang][key]) {
+          el.textContent = translations[currentLang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+        const key = el.getAttribute('data-placeholder-key');
+        if (translations[currentLang][key]) {
+          el.setAttribute('placeholder', translations[currentLang][key]);
+        }
+      });
+
+      const requestType = document.getElementById('requestType');
+      if (requestType) {
+        if (currentLang === 'fr') {
+          requestType.options[0].text = 'Contact';
+          requestType.options[1].text = 'Information';
+          requestType.options[2].text = 'Partenariat';
+          requestType.options[3].text = 'Support';
+        } else {
+          requestType.options[0].text = 'Contact';
+          requestType.options[1].text = 'Information';
+          requestType.options[2].text = 'Partnership';
+          requestType.options[3].text = 'Support';
+        }
+      }
+    }
+
+    // Charge le hero (depuis pages)
+    async function loadContactPageContent() {
+      try {
+        const response = await fetch(`/api/pages/contact?lang=${currentLang}`);
+        const result = await response.json();
+
+        if (response.ok && result.success && result.data) {
+          const page = result.data;
+          document.getElementById('pageTitle').textContent = page.title || t('defaultHeroTitle');
+          document.getElementById('pageContent').textContent = page.content || t('defaultHeroText');
+          document.title = page.meta_title || t('pageTitleTag');
+
+          let meta = document.querySelector('meta[name="description"]');
+          if (!meta) {
+            meta = document.createElement('meta');
+            meta.setAttribute('name', 'description');
+            document.head.appendChild(meta);
+          }
+          meta.setAttribute('content', page.meta_description || t('defaultHeroText'));
+
+          if (page.hero_image) {
+            document.getElementById('heroImage').src = page.hero_image;
+          }
+        } else {
+          document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+          document.getElementById('pageContent').textContent = t('defaultHeroText');
+          document.title = t('pageTitleTag');
+        }
+      } catch (error) {
+        console.error("Error loading page:", error);
+        document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+        document.getElementById('pageContent').textContent = t('defaultHeroText');
+        document.title = t('pageTitleTag');
+      }
+    }
+
+    // Charge les sections dynamiques (depuis /api/sections/contact)
+    async function loadContactSections() {
+      try {
+        const response = await fetch(`/api/sections/contact?lang=${currentLang}`);
+        const result = await response.json();
+
+        if (response.ok && result.success && Array.isArray(result.data)) {
+          currentSections = result.data;
+        } else {
+          currentSections = [];
+        }
+      } catch (error) {
+        console.error("Error loading sections:", error);
+        currentSections = [];
+      }
+    }
+
+    // Affiche les sections dynamiquement
+    function renderDynamicSections() {
+      const container = document.getElementById('dynamicSections');
+      if (!container) return;
+
+      if (!currentSections.length) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = currentSections.map(section => {
+        const title = escapeHtml(section.title || '');
+        const content = escapeHtml(section.content || '');
+        const buttonText = escapeHtml(section.button_text || '');
+        const buttonLink = escapeAttribute(section.button_link || '#');
+        const imagePath = escapeAttribute(section.image_path || '');
+
+        // Section de type "info" (texte + image optionnelle)
+        if (section.section_type === 'info') {
+          return `
+            <section class="home-intro">
+              <div class="section-container">
+                ${imagePath ? `<img src="${imagePath}" alt="${title}" class="section-image" style="width: 100%; max-width: 600px; margin-bottom: 1.5rem; border-radius: 12px;">` : ''}
+                <h2>${title}</h2>
+                <p style="margin-top: 1rem; line-height: 1.6;">${content}</p>
+              </div>
+            </section>
+          `;
+        }
+
+        // Section de type "cta" (appel à l'action)
+        if (section.section_type === 'cta') {
+          return `
+            <section class="home-intro">
+              <div class="section-container cta-block">
+                <h2>${title}</h2>
+                <p>${content}</p>
+                ${buttonText ? `
+                <div class="hero-buttons" style="justify-content: center; margin-top: 1.5rem;">
+                  <a href="${buttonLink}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>${buttonText}</span>
+                  </a>
+                </div>
+                ` : ''}
+              </div>
+            </section>
+          `;
+        }
+
+        // Section de type "contact_methods" (méthodes de contact)
+        if (section.section_type === 'contact_methods') {
+          return `
+            <section class="home-intro">
+              <div class="section-container">
+                <h2>${title}</h2>
+                <div class="contact-methods" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                  ${content.split('|||').map(method => {
+                    const [icon, methodTitle, methodDesc, methodLink] = method.split(':::');
+                    return `
+                      <div class="contact-method" style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem; color: #4f46e5;">
+                          <i class="fas ${icon || 'fa-envelope'}"></i>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem;">${escapeHtml(methodTitle || '')}</h3>
+                        <p style="color: #64748b; margin-bottom: 1rem;">${escapeHtml(methodDesc || '')}</p>
+                        ${methodLink ? `<a href="${escapeAttribute(methodLink)}" style="color: #4f46e5; font-weight: 600;">Learn more →</a>` : ''}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </section>
+          `;
+        }
+
+        // Type par défaut (texte simple)
+        return `
+          <section class="home-intro">
+            <div class="section-container">
+              <h2>${title}</h2>
+              <p style="line-height: 1.6; margin-top: 1rem;">${content}</p>
+            </div>
+          </section>
+        `;
+      }).join('');
+    }
+
+    function showMessage(type, text) {
+      const box = document.getElementById('formMessage');
+      box.className = `message ${type}`;
+      box.innerHTML = text;
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!fullName || !email || !message) {
+        showMessage('error', t('requiredMessage'));
+        return;
+      }
+
+      const payload = {
+        full_name: fullName,
+        organization: document.getElementById('organization').value.trim(),
+        email: email,
+        phone: document.getElementById('phone').value.trim(),
+        subject: document.getElementById('subject').value.trim(),
+        request_type: document.getElementById('requestType').value,
+        message: message,
+        language: currentLang
+      };
+
+      const originalHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> ${t('sending')}`;
+
+      try {
+        const response = await fetch('/api/contacts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || t('errorMessage'));
+        }
+
+        document.getElementById('contactForm').reset();
+        updateLocalTexts();
+        showMessage('success', t('successMessage'));
+      } catch (error) {
+        showMessage('error', error.message || t('errorMessage'));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHtml;
+        updateLocalTexts();
+      }
+    }
+
+    // Rafraîchit toute la page
+    async function refreshPage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = currentLang;
+      updateLocalTexts();
+
+      await Promise.all([
+        loadContactPageContent(),
+        loadContactSections()
+      ]);
+
+      renderDynamicSections();
+    }
+
+    // Initialisation
+    (async function init() {
+      if (typeof initGlobalLayout === 'function') {
+        currentLang = await initGlobalLayout(translations, refreshPage);
+      }
+      document.getElementById('contactForm').addEventListener('submit', handleSubmit);
+      await refreshPage(currentLang);
+    })();
+  </script>
+</body>
+</html>

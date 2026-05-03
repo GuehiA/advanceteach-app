@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AdvanceTeach</title>
+  <meta name="description" content="AdvanceTeach research solutions" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="hero">
+  <div class="hero-container">
+    <div class="hero-text">
+      <h1 id="pageTitle">Loading...</h1>
+      <p id="pageContent">Loading...</p>
+
+      <div class="hero-buttons">
+        <a href="devis.html" class="btn btn-primary">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span data-key="quoteBtn">Request a quote</span>
+        </a>
+        <a href="contact.html" class="btn btn-secondary">
+          <i class="fas fa-headset"></i>
+          <span data-key="contactBtn">Contact us</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img
+        id="heroImage"
+        src="images/research-hero.jpg"
+        alt="Research Solutions"
+        class="hero-logo"
+        onerror="this.src='https://placehold.co/520x340?text=Research+Solutions'"
+      >
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container">
+    <h2><span data-key="researchSectionTitle">Solutions for researchers</span></h2>
+    <div class="cards" id="researchCards">
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3 data-key="loading">Loading...</h3>
+        <p data-key="loadingText">Please wait.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-intro">
+  <div class="section-container cta-block">
+    <h2><span data-key="ctaTitle">Build your research environment</span></h2>
+    <p><span data-key="ctaDesc">AdvanceTeach supports researchers, labs and institutions with digital tools, intelligent workflows and AI-enabled research environments.</span></p>
+
+    <div class="hero-buttons" style="justify-content: center;">
+      <a href="devis.html" class="btn btn-primary">
+        <i class="fas fa-file-signature"></i>
+        <span data-key="ctaQuoteBtn">Request a quote</span>
+      </a>
+      <a href="contact.html" class="btn btn-secondary">
+        <i class="fas fa-paper-plane"></i>
+        <span data-key="ctaContactBtn">Write to AdvanceTeach</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="/js/layout.js"></script>
+<script>
+  const translations = {
+    en: {
+      pageTitleTag: "AdvanceTeach | Research Solutions",
+      home: "Home",
+      about: "About",
+      services: "Services",
+      projects: "Projects",
+      trainings: "Trainings",
+      quote: "Quote",
+      contact: "Contact",
+
+      quoteBtn: "Request a quote",
+      contactBtn: "Contact us",
+
+      researchSectionTitle: "Solutions for researchers",
+      ctaTitle: "Build your research environment",
+      ctaDesc: "AdvanceTeach supports researchers, labs and institutions with digital tools, intelligent workflows and AI-enabled research environments.",
+      ctaQuoteBtn: "Request a quote",
+      ctaContactBtn: "Write to AdvanceTeach",
+
+      footer: "© 2025 AdvanceTeach — Artificial intelligence, smart platforms and training.",
+
+      loading: "Loading...",
+      loadingText: "Please wait.",
+      noResearch: "No research solutions available at the moment.",
+      noResearchText: "New research-focused solutions will appear here soon.",
+      errorTitle: "Unable to load content",
+      errorText: "Please try again later.",
+
+      defaultHeroTitle: "Solutions designed for research and knowledge creation",
+      defaultHeroText: "AdvanceTeach helps researchers and institutions build intelligent environments for collaboration, analysis, publication and digital research support."
+    },
+
+    fr: {
+      pageTitleTag: "AdvanceTeach | Solutions chercheurs",
+      home: "Accueil",
+      about: "À propos",
+      services: "Services",
+      projects: "Réalisations",
+      trainings: "Formations",
+      quote: "Devis",
+      contact: "Contact",
+
+      quoteBtn: "Demander un devis",
+      contactBtn: "Nous contacter",
+
+      researchSectionTitle: "Solutions pour chercheurs",
+      ctaTitle: "Construisez votre environnement de recherche",
+      ctaDesc: "AdvanceTeach accompagne les chercheurs, laboratoires et institutions avec des outils numériques, des flux intelligents et des environnements de recherche enrichis par l’IA.",
+      ctaQuoteBtn: "Demander un devis",
+      ctaContactBtn: "Écrire à AdvanceTeach",
+
+      footer: "© 2025 AdvanceTeach — Intelligence artificielle, plateformes intelligentes et formation.",
+
+      loading: "Chargement...",
+      loadingText: "Veuillez patienter.",
+      noResearch: "Aucune solution de recherche disponible pour le moment.",
+      noResearchText: "De nouvelles solutions orientées recherche apparaîtront ici bientôt.",
+      errorTitle: "Impossible de charger le contenu",
+      errorText: "Veuillez réessayer plus tard.",
+
+      defaultHeroTitle: "Des solutions conçues pour la recherche et la production de savoir",
+      defaultHeroText: "AdvanceTeach aide les chercheurs et les institutions à construire des environnements intelligents pour la collaboration, l’analyse, la publication et l’appui numérique à la recherche."
+    }
+  };
+
+  let currentLang = 'en';
+
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;'
+    }[char]));
+  }
+
+  function escapeAttribute(text) {
+    return escapeHtml(text).replace(/'/g, '&#39;');
+  }
+
+  async function loadPageContent() {
+    try {
+      const response = await fetch(`/api/pages/research?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.data) {
+        throw new Error('Research page load failed');
+      }
+
+      const page = result.data;
+
+      document.getElementById('pageTitle').textContent = page.title || t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = page.content || t('defaultHeroText');
+      document.title = page.meta_title || t('pageTitleTag');
+
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', page.meta_description || t('defaultHeroText'));
+
+      if (page.hero_image) {
+        document.getElementById('heroImage').src = page.hero_image;
+      }
+    } catch {
+      document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
+      document.getElementById('pageContent').textContent = t('defaultHeroText');
+      document.title = t('pageTitleTag');
+    }
+  }
+
+  function isResearchService(service) {
+    const text = `${service.title || ''} ${service.short_description || ''}`.toLowerCase();
+    return (
+      text.includes('research') ||
+      text.includes('chercheur') ||
+      text.includes('chercheurs') ||
+      text.includes('recherche')
+    );
+  }
+
+  function renderResearch(services) {
+    const container = document.getElementById('researchCards');
+
+    if (!services.length) {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-info"></i>
+          <h3>${escapeHtml(t('noResearch'))}</h3>
+          <p>${escapeHtml(t('noResearchText'))}</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = services.map(service => `
+      <div class="card">
+        <img
+          src="${escapeAttribute(service.image_path || 'https://placehold.co/500x280?text=AdvanceTeach')}"
+          alt="${escapeAttribute(service.title || 'Research service')}"
+          class="card-image"
+          onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'"
+        >
+        <i class="${escapeAttribute(service.icon || 'fas fa-flask')}"></i>
+        <h3>${escapeHtml(service.title || '')}</h3>
+        <p>${escapeHtml(service.short_description || '')}</p>
+      </div>
+    `).join('');
+  }
+
+  async function loadResearchServices() {
+    const container = document.getElementById('researchCards');
+    container.innerHTML = `
+      <div class="card">
+        <i class="fas fa-spinner fa-pulse"></i>
+        <h3>${escapeHtml(t('loading'))}</h3>
+        <p>${escapeHtml(t('loadingText'))}</p>
+      </div>
+    `;
+
+    try {
+      const response = await fetch(`/api/services?lang=${currentLang}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !Array.isArray(result.data)) {
+        throw new Error('Research services load failed');
+      }
+
+      renderResearch(result.data.filter(isResearchService));
+    } catch {
+      container.innerHTML = `
+        <div class="card">
+          <i class="fas fa-circle-exclamation"></i>
+          <h3>${escapeHtml(t('errorTitle'))}</h3>
+          <p>${escapeHtml(t('errorText'))}</p>
+        </div>
+      `;
+    }
+  }
+
+  async function refreshPage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const key = el.getAttribute('data-key');
+      if (translations[currentLang][key]) {
+        el.textContent = translations[currentLang][key];
+      }
+    });
+
+    await loadPageContent();
+    await loadResearchServices();
+  }
+
+  (async function init() {
+    currentLang = await initGlobalLayout(translations, refreshPage);
+    await refreshPage(currentLang);
+  })();
+</script>
+</body>
+</html>
