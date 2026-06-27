@@ -3,18 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>AdvanceTeach</title>
+
+  <title>AdvanceTeach | Trainings</title>
   <meta name="description" content="AdvanceTeach trainings" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  >
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
 <div id="site-header"></div>
 
 <section class="hero">
   <div class="hero-container">
+
     <div class="hero-text">
       <h1 id="pageTitle">Loading...</h1>
       <p id="pageContent">Loading...</p>
@@ -24,6 +34,7 @@
           <i class="fas fa-file-invoice-dollar"></i>
           <span data-key="quoteBtn">Request a quote</span>
         </a>
+
         <a href="contact.html" class="btn btn-secondary">
           <i class="fas fa-headset"></i>
           <span data-key="contactBtn">Contact us</span>
@@ -37,15 +48,20 @@
         src="images/trainings-hero.jpg"
         alt="AdvanceTeach Trainings"
         class="hero-logo"
-        onerror="this.src='https://placehold.co/520x340?text=Trainings'"
+        onerror="this.onerror=null; this.src='https://placehold.co/520x340?text=Trainings';"
       >
     </div>
+
   </div>
 </section>
 
 <section class="home-intro">
   <div class="section-container">
-    <h2><span data-key="trainingsSectionTitle">Our training offers</span></h2>
+
+    <h2>
+      <span data-key="trainingsSectionTitle">Our training offers</span>
+    </h2>
+
     <div class="cards" id="trainingsGrid">
       <div class="card">
         <i class="fas fa-spinner fa-pulse"></i>
@@ -53,39 +69,54 @@
         <p data-key="loadingText">Please wait.</p>
       </div>
     </div>
+
   </div>
 </section>
 
 <section class="home-intro">
   <div class="section-container cta-block">
-    <h2><span data-key="ctaTitle">Train your teams with confidence</span></h2>
-    <p><span data-key="ctaDesc">AdvanceTeach designs practical and strategic learning experiences around AI, productivity and digital transformation.</span></p>
 
-    <div class="hero-buttons" style="justify-content: center;">
+    <h2>
+      <span data-key="ctaTitle">Train your teams with confidence</span>
+    </h2>
+
+    <p>
+      <span data-key="ctaDesc">
+        AdvanceTeach designs practical and strategic learning experiences around AI, productivity and digital transformation.
+      </span>
+    </p>
+
+    <div class="hero-buttons" style="justify-content:center;">
       <a href="devis.html" class="btn btn-primary">
         <i class="fas fa-file-signature"></i>
         <span data-key="ctaQuoteBtn">Request a quote</span>
       </a>
+
       <a href="contact.html" class="btn btn-secondary">
         <i class="fas fa-paper-plane"></i>
         <span data-key="ctaContactBtn">Write to AdvanceTeach</span>
       </a>
     </div>
+
   </div>
 </section>
 
 <div id="site-footer"></div>
 
 <script src="/js/layout.js"></script>
+
 <script>
   const translations = {
     en: {
       pageTitleTag: "AdvanceTeach | Trainings",
+
       home: "Home",
       about: "About",
       services: "Services",
       projects: "Projects",
       trainings: "Trainings",
+      research: "Research",
+      offers: "Offers",
       quote: "Quote",
       contact: "Contact",
 
@@ -93,6 +124,7 @@
       contactBtn: "Contact us",
 
       trainingsSectionTitle: "Our training offers",
+
       ctaTitle: "Train your teams with confidence",
       ctaDesc: "AdvanceTeach designs practical and strategic learning experiences around AI, productivity and digital transformation.",
       ctaQuoteBtn: "Request a quote",
@@ -102,23 +134,27 @@
 
       loading: "Loading...",
       loadingText: "Please wait.",
+
       noTrainings: "No training offers available at the moment.",
       noTrainingsText: "New learning offers will appear here soon.",
+
       errorTitle: "Unable to load trainings",
       errorText: "Please try again later.",
 
-      defaultHeroTitle: "Professional training for modern organizations",
-      defaultHeroText: "AdvanceTeach delivers practical training in AI, responsible use, productivity and intelligent digital transformation.",
-      viewDetails: "View details"
+      defaultHeroTitle: "Professional AI Training",
+      defaultHeroText: "AdvanceTeach provides practical and customized training programs to help educators, professionals, organizations and businesses use artificial intelligence effectively and responsibly."
     },
 
     fr: {
       pageTitleTag: "AdvanceTeach | Formations",
+
       home: "Accueil",
       about: "À propos",
       services: "Services",
       projects: "Réalisations",
       trainings: "Formations",
+      research: "Recherche",
+      offers: "Offres",
       quote: "Devis",
       contact: "Contact",
 
@@ -126,6 +162,7 @@
       contactBtn: "Nous contacter",
 
       trainingsSectionTitle: "Nos offres de formation",
+
       ctaTitle: "Formez vos équipes en toute confiance",
       ctaDesc: "AdvanceTeach conçoit des expériences de formation pratiques et stratégiques autour de l’IA, de la productivité et de la transformation numérique.",
       ctaQuoteBtn: "Demander un devis",
@@ -135,133 +172,318 @@
 
       loading: "Chargement...",
       loadingText: "Veuillez patienter.",
+
       noTrainings: "Aucune offre de formation disponible pour le moment.",
       noTrainingsText: "De nouvelles offres apparaîtront ici bientôt.",
+
       errorTitle: "Impossible de charger les formations",
       errorText: "Veuillez réessayer plus tard.",
 
-      defaultHeroTitle: "Des formations professionnelles pour les organisations modernes",
-      defaultHeroText: "AdvanceTeach propose des formations concrètes en IA, usages responsables, productivité et transformation numérique intelligente.",
-      viewDetails: "Voir le détail"
+      defaultHeroTitle: "Formations professionnelles en intelligence artificielle",
+      defaultHeroText: "AdvanceTeach propose des formations pratiques et adaptées pour aider les enseignants, les professionnels, les organismes et les entreprises à utiliser l’intelligence artificielle de manière efficace et responsable."
     }
   };
 
-  let currentLang = 'en';
+  let currentLang = "en";
 
   function t(key) {
-    return translations[currentLang][key] || key;
+    return translations[currentLang]?.[key] || key;
   }
 
-  function escapeHtml(text) {
-    if (!text) return '';
-    return String(text).replace(/[&<>"]/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;'
-    }[char]));
+  function escapeHtml(value) {
+    if (value === null || value === undefined) {
+      return "";
+    }
+
+    return String(value).replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[character]));
   }
 
-  function escapeAttribute(text) {
-    return escapeHtml(text).replace(/'/g, '&#39;');
+  function escapeAttribute(value) {
+    return escapeHtml(value);
+  }
+
+  function updateStaticTranslations() {
+    document.querySelectorAll("[data-key]").forEach(element => {
+      const key = element.getAttribute("data-key");
+
+      if (translations[currentLang]?.[key]) {
+        element.textContent = translations[currentLang][key];
+      }
+    });
+  }
+
+  function applyDefaultHeroContent() {
+    document.getElementById("pageTitle").textContent =
+      t("defaultHeroTitle");
+
+    document.getElementById("pageContent").textContent =
+      t("defaultHeroText");
+
+    document.title =
+      t("pageTitleTag");
+
+    const heroImage =
+      document.getElementById("heroImage");
+
+    if (heroImage) {
+      heroImage.src = "images/trainings-hero.jpg";
+    }
+
+    let metaDescription =
+      document.querySelector('meta[name="description"]');
+
+    if (!metaDescription) {
+      metaDescription = document.createElement("meta");
+      metaDescription.setAttribute("name", "description");
+      document.head.appendChild(metaDescription);
+    }
+
+    metaDescription.setAttribute(
+      "content",
+      t("defaultHeroText")
+    );
   }
 
   async function loadTrainingsPageContent() {
-    document.getElementById('pageTitle').textContent = t('defaultHeroTitle');
-    document.getElementById('pageContent').textContent = t('defaultHeroText');
-    document.title = t('pageTitleTag');
+    try {
+      const response = await fetch(
+        `/api/pages/training?lang=${encodeURIComponent(currentLang)}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success || !result.data) {
+        throw new Error("Training page not found");
+      }
+
+      const page = result.data;
+
+      document.getElementById("pageTitle").textContent =
+        page.title || t("defaultHeroTitle");
+
+      document.getElementById("pageContent").textContent =
+        page.content || t("defaultHeroText");
+
+      document.title =
+        page.meta_title || t("pageTitleTag");
+
+      let metaDescription =
+        document.querySelector('meta[name="description"]');
+
+      if (!metaDescription) {
+        metaDescription = document.createElement("meta");
+        metaDescription.setAttribute("name", "description");
+        document.head.appendChild(metaDescription);
+      }
+
+      metaDescription.setAttribute(
+        "content",
+        page.meta_description ||
+        page.content ||
+        t("defaultHeroText")
+      );
+
+      const heroImage =
+        document.getElementById("heroImage");
+
+      if (page.hero_image && page.hero_image.trim()) {
+        heroImage.src = page.hero_image.trim();
+      } else {
+        heroImage.src = "images/trainings-hero.jpg";
+      }
+
+    } catch (error) {
+      console.error(
+        "Error loading Training page content:",
+        error
+      );
+
+      applyDefaultHeroContent();
+    }
   }
 
   function isTrainingService(service) {
-    const text = `${service.title || ''} ${service.short_description || ''}`.toLowerCase();
+    const title =
+      String(service.title || "").toLowerCase();
+
+    const description =
+      String(service.short_description || "").toLowerCase();
+
+    const combinedText =
+      `${title} ${description}`;
+
     return (
-      text.includes('training') ||
-      text.includes('formation') ||
-      text.includes('learning') ||
-      text.includes('professional training') ||
-      text.includes('form') // attrape "formation", "formations"
+      combinedText.includes("training") ||
+      combinedText.includes("formation") ||
+      combinedText.includes("learning") ||
+      combinedText.includes("workshop") ||
+      combinedText.includes("atelier")
     );
   }
 
   function renderTrainings(services) {
-    const container = document.getElementById('trainingsGrid');
+    const container =
+      document.getElementById("trainingsGrid");
 
-    if (!services.length) {
+    if (!Array.isArray(services) || services.length === 0) {
       container.innerHTML = `
         <div class="card">
           <i class="fas fa-circle-info"></i>
-          <h3>${escapeHtml(t('noTrainings'))}</h3>
-          <p>${escapeHtml(t('noTrainingsText'))}</p>
+          <h3>${escapeHtml(t("noTrainings"))}</h3>
+          <p>${escapeHtml(t("noTrainingsText"))}</p>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = services.map(service => `
-      <div class="card">
-        <img
-          src="${escapeAttribute(service.image_path || 'https://placehold.co/500x280?text=AdvanceTeach')}"
-          alt="${escapeAttribute(service.title || 'Training')}"
-          class="card-image"
-          onerror="this.src='https://placehold.co/500x280?text=AdvanceTeach'"
-        >
-        <i class="${escapeAttribute(service.icon || 'fas fa-chalkboard-user')}"></i>
-        <h3>${escapeHtml(service.title || '')}</h3>
-        <p>${escapeHtml(service.short_description || '')}</p>
-      </div>
-    `).join('');
+    container.innerHTML = services.map(service => {
+      const imagePath =
+        service.image_path ||
+        "https://placehold.co/500x280?text=AdvanceTeach";
+
+      const icon =
+        service.icon ||
+        "fas fa-chalkboard-user";
+
+      return `
+        <div class="card">
+
+          <img
+            src="${escapeAttribute(imagePath)}"
+            alt="${escapeAttribute(service.title || "Training")}"
+            class="card-image"
+            onerror="this.onerror=null; this.src='https://placehold.co/500x280?text=AdvanceTeach';"
+          >
+
+          <i class="${escapeAttribute(icon)}"></i>
+
+          <h3>
+            ${escapeHtml(service.title || "")}
+          </h3>
+
+          ${
+            service.short_description
+              ? `<p>${escapeHtml(service.short_description)}</p>`
+              : ""
+          }
+
+        </div>
+      `;
+    }).join("");
   }
 
   async function loadTrainings() {
-    const container = document.getElementById('trainingsGrid');
+    const container =
+      document.getElementById("trainingsGrid");
+
     container.innerHTML = `
       <div class="card">
         <i class="fas fa-spinner fa-pulse"></i>
-        <h3>${escapeHtml(t('loading'))}</h3>
-        <p>${escapeHtml(t('loadingText'))}</p>
+        <h3>${escapeHtml(t("loading"))}</h3>
+        <p>${escapeHtml(t("loadingText"))}</p>
       </div>
     `;
 
     try {
-      const response = await fetch(`/api/services?lang=${currentLang}`);
-      const result = await response.json();
+      const response = await fetch(
+        `/api/services?lang=${encodeURIComponent(currentLang)}`
+      );
 
-      if (!response.ok || !result.success || !Array.isArray(result.data)) {
-        throw new Error('Trainings load failed');
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
 
-      const trainings = result.data.filter(isTrainingService);
+      const result = await response.json();
+
+      if (!result.success || !Array.isArray(result.data)) {
+        throw new Error("Trainings load failed");
+      }
+
+      const trainings =
+        result.data.filter(isTrainingService);
+
       renderTrainings(trainings);
+
     } catch (error) {
+      console.error(
+        "Error loading trainings:",
+        error
+      );
+
       container.innerHTML = `
         <div class="card">
           <i class="fas fa-circle-exclamation"></i>
-          <h3>${escapeHtml(t('errorTitle'))}</h3>
-          <p>${escapeHtml(t('errorText'))}</p>
+          <h3>${escapeHtml(t("errorTitle"))}</h3>
+          <p>${escapeHtml(t("errorText"))}</p>
         </div>
       `;
     }
   }
 
   async function refreshPage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = currentLang;
+    currentLang =
+      lang === "fr"
+        ? "fr"
+        : "en";
 
-    document.querySelectorAll('[data-key]').forEach(el => {
-      const key = el.getAttribute('data-key');
-      if (translations[currentLang][key]) {
-        el.textContent = translations[currentLang][key];
-      }
-    });
+    document.documentElement.lang =
+      currentLang;
 
-    await loadTrainingsPageContent();
-    await loadTrainings();
+    updateStaticTranslations();
+
+    await Promise.all([
+      loadTrainingsPageContent(),
+      loadTrainings()
+    ]);
   }
 
-  (async function init() {
-    currentLang = await initGlobalLayout(translations, refreshPage);
-    await refreshPage(currentLang);
-  })();
+  async function initializePage() {
+    try {
+      if (typeof initGlobalLayout === "function") {
+        const selectedLanguage =
+          await initGlobalLayout(
+            translations,
+            refreshPage
+          );
+
+        currentLang =
+          selectedLanguage === "fr"
+            ? "fr"
+            : "en";
+      } else {
+        currentLang =
+          localStorage.getItem("siteLang") === "fr"
+            ? "fr"
+            : "en";
+      }
+
+      await refreshPage(currentLang);
+
+    } catch (error) {
+      console.error(
+        "Error initializing Training page:",
+        error
+      );
+
+      currentLang = "en";
+      updateStaticTranslations();
+      applyDefaultHeroContent();
+      await loadTrainings();
+    }
+  }
+
+  initializePage();
 </script>
+
 </body>
 </html>
