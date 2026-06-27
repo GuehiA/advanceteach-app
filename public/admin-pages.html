@@ -234,6 +234,18 @@
       display: block;
     }
 
+    .page-item .page-badge {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 8px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #fff7ed;
+      color: #c2410c;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -530,6 +542,23 @@
   let currentLang = localStorage.getItem('adminLang') || 'en';
   let currentAdmin = null;
   let currentPage = null;
+  let loadedPages = [];
+
+  const DEFAULT_QUOTE_PAGE = {
+    id: null,
+    slug: 'devis',
+    title_en: 'Request a Tailored Quote',
+    title_fr: 'Demandez un devis sur mesure',
+    content_en: 'Tell us about your needs and AdvanceTeach will prepare a solution tailored to your goals, context and timeline.',
+    content_fr: 'Présentez vos besoins et AdvanceTeach préparera une solution adaptée à vos objectifs, votre contexte et votre calendrier.',
+    meta_title_en: 'Request a Quote | AdvanceTeach',
+    meta_title_fr: 'Demander un devis | AdvanceTeach',
+    meta_description_en: 'Request a tailored quote for AI consulting, training, intelligent platforms or custom web applications.',
+    meta_description_fr: 'Demandez un devis personnalisé pour une formation en IA, une plateforme intelligente, une application web ou un accompagnement stratégique.',
+    hero_image: '/uploads/devis-hero.png',
+    is_published: true,
+    _isVirtual: true
+  };
 
   const translations = {
     en: {
@@ -539,6 +568,7 @@
       services: "Services",
       projects: "Projects",
       pages: "Pages",
+      sections: "Sections",
       media: "Media",
       logout: "Logout",
       pagesTitle: "Pages management",
@@ -568,7 +598,10 @@
       langFr: "French",
       slugLabel: "Slug",
       genericError: "Error",
-      noPageSelected: "No page selected"
+      noPageSelected: "No page selected",
+      quotePageToCreate: "Page to create",
+      createSuccess: "Quote page created successfully.",
+      createError: "Unable to create the quote page. Check that the POST /api/admin/pages route exists."
     },
     fr: {
       dashboard: "Dashboard",
@@ -577,6 +610,7 @@
       services: "Services",
       projects: "Réalisations",
       pages: "Pages",
+      sections: "Sections",
       media: "Médias",
       logout: "Déconnexion",
       pagesTitle: "Gestion des pages",
@@ -606,7 +640,10 @@
       langFr: "Français",
       slugLabel: "Slug",
       genericError: "Erreur",
-      noPageSelected: "Aucune page sélectionnée"
+      noPageSelected: "Aucune page sélectionnée",
+      quotePageToCreate: "Page à créer",
+      createSuccess: "La page Devis a été créée avec succès.",
+      createError: "Impossible de créer la page Devis. Vérifiez que la route POST /api/admin/pages existe."
     }
   };
 
@@ -647,6 +684,16 @@
       window.location.href = 'admin-login.html';
       return false;
     }
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[character]));
   }
 
   function showMessage(type, text) {
@@ -690,7 +737,33 @@
     document.getElementById('isPublished').checked = !!page.is_published;
   }
 
-  async function loadPages() {
+  function renderPagesList(pages) {
+    const list = document.getElementById('pagesList');
+    list.innerHTML = '';
+
+    pages.forEach(page => {
+      const item = document.createElement('div');
+      item.className = 'page-item';
+      item.dataset.slug = page.slug;
+
+      item.innerHTML = `
+        <strong>${escapeHtml(page.title_en || page.slug)}</strong>
+        <small>${escapeHtml(page.title_fr || page.slug)}</small>
+        <small>${t('slugLabel')}: ${escapeHtml(page.slug)}</small>
+        ${page._isVirtual ? `<span class="page-badge">${t('quotePageToCreate')}</span>` : ''}
+      `;
+
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.page-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        fillForm(page);
+      });
+
+      list.appendChild(item);
+    });
+  }
+
+  async function loadPages(preferredSlug = null) {
     const list = document.getElementById('pagesList');
     list.innerHTML = `<div class="page-item">${t('loading')}</div>`;
 
@@ -706,34 +779,63 @@
       }
 
       const data = await response.json();
+      const apiPages = data.success && Array.isArray(data.data) ? data.data : [];
 
-      if (!data.success || !data.data.length) {
+      const quoteExists = apiPages.some(page => page.slug === 'devis');
+      loadedPages = quoteExists
+        ? apiPages
+        : [...apiPages, { ...DEFAULT_QUOTE_PAGE }];
+
+      if (!loadedPages.length) {
         list.innerHTML = `<div class="page-item">${t('noPages')}</div>`;
         return;
       }
 
-      list.innerHTML = '';
-
-      data.data.forEach(page => {
-        const item = document.createElement('div');
-        item.className = 'page-item';
-        item.innerHTML = `
-          <strong>${page.title_en || page.slug}</strong>
-          <small>${page.title_fr || page.slug}</small>
-          <small>${t('slugLabel')}: ${page.slug}</small>
-        `;
-
-        item.addEventListener('click', () => {
-          document.querySelectorAll('.page-item').forEach(el => el.classList.remove('active'));
-          item.classList.add('active');
-          fillForm(page);
-        });
-
-        list.appendChild(item);
+      loadedPages.sort((a, b) => {
+        if (a.slug === 'devis') return -1;
+        if (b.slug === 'devis') return 1;
+        return String(a.title_en || a.slug).localeCompare(String(b.title_en || b.slug));
       });
+
+      renderPagesList(loadedPages);
+
+      const slugToSelect =
+        preferredSlug ||
+        new URLSearchParams(window.location.search).get('slug');
+
+      if (slugToSelect) {
+        const pageToSelect = loadedPages.find(page => page.slug === slugToSelect);
+        const itemToSelect = document.querySelector(`.page-item[data-slug="${CSS.escape(slugToSelect)}"]`);
+
+        if (pageToSelect && itemToSelect) {
+          itemToSelect.classList.add('active');
+          fillForm(pageToSelect);
+        }
+      }
     } catch (error) {
+      console.error('Error loading pages:', error);
       list.innerHTML = `<div class="page-item">${t('genericError')}</div>`;
     }
+  }
+
+  async function createPage(payload) {
+    const response = await fetch('/api/admin/pages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        slug: 'devis',
+        ...payload
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || t('createError'));
+    }
+
+    return data;
   }
 
   async function savePage(e) {
@@ -759,27 +861,37 @@
     };
 
     try {
-      const response = await fetch(`/api/admin/pages/${slug}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify(payload)
-      });
+      let data;
 
-      const data = await response.json();
+      if (currentPage && currentPage._isVirtual) {
+        data = await createPage(payload);
+        showMessage('success', t('createSuccess'));
+      } else {
+        const response = await fetch(`/api/admin/pages/${encodeURIComponent(slug)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload)
+        });
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Error');
+        data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || t('genericError'));
+        }
+
+        showMessage('success', t('updateSuccess'));
       }
 
-      showMessage('success', t('updateSuccess'));
-      await loadPages();
+      await loadPages(slug);
 
       if (data.data) {
-        fillForm(data.data);
+        const savedPage = { ...data.data, _isVirtual: false };
+        fillForm(savedPage);
       }
     } catch (error) {
-      showMessage('error', error.message);
+      console.error('Error saving page:', error);
+      showMessage('error', error.message || t('genericError'));
     }
   }
 
@@ -789,10 +901,7 @@
       currentLang = link.getAttribute('data-lang');
       localStorage.setItem('adminLang', currentLang);
       updateUILanguage();
-      loadPages();
-      if (currentPage) {
-        fillForm(currentPage);
-      }
+      loadPages(currentPage ? currentPage.slug : null);
     });
   });
 
